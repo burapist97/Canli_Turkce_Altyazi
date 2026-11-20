@@ -1,0 +1,23 @@
+{
+  "cevirme": [
+    "Lucia",
+    "Jason",
+    "Vice City",
+    "Leonida",
+    "Port Gellhorn",
+    "Grassrivers",
+    "Ambrosia",
+    "Mount Kalaga"
+  ],
+  "terimler": {
+    "cops": "polisler",
+    "five-o": "aynasızlar",
+    "homie": "kanka",
+    "bro": "kanka",
+    "dude": "dostum",
+    "score": "vurgun",
+    "heist": "soygun",
+    "getaway": "kaçış",
+    "wanted level": "aranma seviyesi"
+  }
+}

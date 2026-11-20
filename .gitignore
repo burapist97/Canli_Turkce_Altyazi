@@ -1,0 +1,36 @@
+# Python ortamları ve önbellek
+.venv/
+.venv-ses/
+__pycache__/
+*.pyc
+
+# Derleme çıktıları (paket\derle.ps1 üretir)
+build/
+dist/
+dist-ses/
+paket/cikti/
+paket/gorseller/
+*.zip
+
+# Modeller: kaynak koddan ayrı, kendi lisanslarıyla gelen dosyalar. Nasıl edinileceği README.md'de
+# (GitHub sürüm sayfasındaki modeller zip'i ya da paket\model_hazirla.ps1 / paket\hafif_ses\model_indir.py).
+modeller/
+
+# Çalışma sırasında oluşan dosyalar
+ceviri_onbellek.json
+model_secimi.json
+gunluk.txt
+*.log
+
+# Test ve görsel çıktıları
+tests/cikti/
+tests/cikti_koyu/
+magaza/gorseller/eski/
+magaza/gorseller/arayuz/
+
+# Ses tasarımı denemelerinin ara dosyaları (sonuçlar paket/dogal_ses/sesler ve hafif_ses/sesler içinde)
+paket/dogal_ses/adaylar/
+
+# Geliştiricinin kendi çalışma notları (kaynak kodun parçası değil)
+CLAUDE.md
+YAYIN_KONTROL_LISTESI.md

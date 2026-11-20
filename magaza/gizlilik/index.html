@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canlı Türkçe Altyazı — Gizlilik Politikası / Privacy Policy</title>
+<style>
+  :root { --zemin: #ffffff; --yazi: #1d1d24; --soluk: #5b5b6b; --cizgi: #e4e4ea; --vurgu: #e2531a; }
+  @media (prefers-color-scheme: dark) { :root { --zemin: #14141c; --yazi: #ececf2; --soluk: #a0a0b2; --cizgi: #2c2c38; --vurgu: #ff7a3d; } }
+  body { margin: 0; background: var(--zemin); color: var(--yazi); font: 16px/1.65 "Segoe UI", system-ui, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 19px; margin: 28px 0 6px; }
+  .tarih { color: var(--soluk); margin: 0 0 20px; }
+  .dil { display: flex; gap: 14px; margin-bottom: 8px; }
+  a { color: var(--vurgu); }
+  section + section { border-top: 1px solid var(--cizgi); margin-top: 40px; padding-top: 24px; }
+  ul { padding-left: 22px; }
+</style>
+</head>
+<body>
+<main>
+<div class="dil"><a href="#tr">Türkçe</a><a href="#en">English</a></div>
+
+<section id="tr" lang="tr">
+<h1>Canlı Türkçe Altyazı — Gizlilik Politikası</h1>
+<p class="tarih">Yayıncı: Appic · Son güncelleme: 20 Kasım 2026</p>
+
+<p>Canlı Türkçe Altyazı, ekrandaki (film, dizi, video ve oyunlardaki) İngilizce altyazıyı okuyup Türkçeye çeviren bir Windows uygulamasıdır. Bu sayfa, uygulamanın hangi bilgileri nasıl işlediğini açıklar.</p>
+
+<h2>Kısaca</h2>
+<ul>
+  <li>Hesap açmanız gerekmez. Adınızı, e-postanızı veya başka bir kişisel bilginizi istemeyiz.</li>
+  <li>Reklam, analiz veya kullanım takibi (telemetri) yoktur. Appic'e hiçbir veri gönderilmez.</li>
+  <li>Varsayılan çeviri tamamen bilgisayarınızda, internetsiz çalışır.</li>
+</ul>
+
+<h2>Ekran görüntüsü</h2>
+<p>Uygulama, altyazıyı okumak için ekranınızın görüntüsünü alır: seçtiğiniz alanları, "Tüm ekran" seçiliyse ekranın tamamını, konsol kullanımında ise OBS'teki görüntüyü. Görüntü yalnızca bilgisayarınızın belleğinde işlenir; kaydedilmez ve hiçbir yere gönderilmez.</p>
+
+<h2>Çeviri</h2>
+<ul>
+  <li><b>Ücretsiz (anahtarsız) çeviri</b> — varsayılan: Çeviri bilgisayarınızdaki yerleşik modelle yapılır. Hiçbir metin internete gönderilmez.</li>
+  <li><b>İsteğe bağlı çeviri servisleri</b> (Google Gemini, Groq, DeepL, Anthropic Claude): Bunlardan birini seçip <b>kendi API anahtarınızı</b> girerseniz, ekrandan okunan altyazı metni (ve bağlam için önceki birkaç satır) çeviri için doğrudan o servise gönderilir. Bu durumda ilgili servisin kendi gizlilik politikası ve kullanım şartları geçerlidir. Appic bu metinleri görmez.</li>
+  <li><b>Yerel model</b>: Bilgisayarınızda çalışan bir yapay zekâ programını (ör. Ollama) seçerseniz metin yalnızca bilgisayarınızdaki o programa gönderilir.</li>
+  <li>API anahtarlarınız yalnızca bilgisayarınızda, uygulamanın ayar dosyasında saklanır ve sadece seçtiğiniz servise iletilir.</li>
+</ul>
+
+<h2>Türkçe sesli okuma</h2>
+<p>Sesli okuma, uygulamayla gelen yapay seslerle ya da Windows'un yerleşik sesiyle bilgisayarınızda yapılır; metin internete gönderilmez. Bu özellik geliştirme aşamasındadır.</p>
+<p><b>Karakter sesleri</b> açıksa (kadına kadın sesi, farklı kişilere farklı ses), uygulama konuşanı tanımak için oynayan filmin ya da oyunun sesini dinler: capture card'ın ses girişini ya da bilgisayarın hoparlöre giden sesini. Bu nedenle Windows mikrofon izni isteyebilir. Ses yalnızca bellekte, son birkaç saniye tutularak işlenir; diske kaydedilmez, hiçbir yere gönderilmez. Konuşanları ayırt etmek için çıkarılan ses özellikleri yalnızca uygulama açıkken bellekte durur, kapatınca silinir. Uygulama mikrofonunuzu sizi dinlemek için kullanmaz; bu özellik ayarlardan kapatılabilir.</p>
+<p><b>Doğal Ses Paketi</b> (isteğe bağlı, ayrıca kurulur) yüklüyse Türkçe sesler bilgisayarınızdaki ekran kartında, yerel bir ses sunucusuyla üretilir. Metin internete gönderilmez; paket yalnızca kurulurken ses motorunu ve modeli GitHub ile Hugging Face'ten indirir. Karakter sesleri yapay zekâ ile tasarlanmıştır, gerçek bir kişinin sesi değildir.</p>
+
+<h2>OBS bağlantısı</h2>
+<p>Uygulama, aynı bilgisayardaki OBS Studio'ya yerel bağlantıyla (OBS WebSocket) bağlanır. Bağlanabilmek için OBS'in kendi ayar dosyasındaki WebSocket şifresini yalnızca okur; bu şifre bilgisayarınızdan çıkmaz. OBS dosyalarınızda değişiklik yapmaz.</p>
+
+<h2>Bilgisayarınızda saklananlar</h2>
+<p>Ayarlar, çeviri önbelleği (aynı cümle tekrar çevrilmesin diye) ve teknik bir günlük dosyası yalnızca bilgisayarınızda, uygulamanın veri klasöründe tutulur. Uygulamayı kaldırdığınızda bu dosyaları silebilirsiniz.</p>
+
+<h2>Açık kaynak</h2>
+<p>Uygulama özgür yazılımdır (AGPL-3.0); ne yaptığını kaynak kodundan herkes inceleyebilir.</p>
+
+<h2>Çocuklar</h2>
+<p>Uygulama kişisel bilgi toplamadığı için çocuklardan da bilgi toplamaz.</p>
+
+<h2>Değişiklikler</h2>
+<p>Bu politika değişirse bu sayfa güncellenir ve üstteki tarih değişir.</p>
+
+<h2>İletişim</h2>
+<p>Sorularınız için: <a href="mailto:appic.studio@outlook.com">appic.studio@outlook.com</a></p>
+</section>
+
+<section id="en" lang="en">
+<h1>Canlı Türkçe Altyazı — Privacy Policy</h1>
+<p class="tarih">Publisher: Appic · Last updated: November 20, 2026</p>
+
+<p>Canlı Türkçe Altyazı ("Live Turkish Subtitles") is a Windows app that reads English subtitles on your screen (films, series, videos and games) and translates them into Turkish. This page explains what information the app processes and how.</p>
+
+<h2>Summary</h2>
+<ul>
+  <li>No account is required. We do not ask for your name, email or any other personal information.</li>
+  <li>There are no ads, analytics or usage tracking (telemetry). No data is sent to Appic.</li>
+  <li>The default translation runs entirely on your computer, offline.</li>
+</ul>
+
+<h2>Screen content</h2>
+<p>To read subtitles, the app captures your screen: the areas you select, the whole screen if "Whole screen" is selected, or the video in OBS when used with a console. Images are processed only in your computer's memory; they are not saved and not sent anywhere.</p>
+
+<h2>Translation</h2>
+<ul>
+  <li><b>Free (no key) translation</b> — default: translation is done by a built-in model on your computer. No text is sent over the internet.</li>
+  <li><b>Optional translation services</b> (Google Gemini, Groq, DeepL, Anthropic Claude): if you choose one and enter <b>your own API key</b>, the subtitle text read from the screen (and a few previous lines for context) is sent directly to that service for translation. That service's own privacy policy and terms apply. Appic does not see this text.</li>
+  <li><b>Local model</b>: if you choose an AI program running on your own computer (e.g. Ollama), the text is sent only to that program on your computer.</li>
+  <li>Your API keys are stored only on your computer, in the app's settings file, and are sent only to the service you selected.</li>
+</ul>
+
+<h2>Turkish voice reading</h2>
+<p>Voice reading is done on your computer, with the synthetic voices bundled with the app or with Windows' built-in voice; text is not sent over the internet. This feature is under development.</p>
+<p>If <b>character voices</b> are on (a female voice for women, different voices for different speakers), the app listens to the audio of the film or game being played to recognise who is speaking: the capture card's audio input or the sound your computer sends to its speakers. For this reason Windows may ask for microphone permission. Audio is processed only in memory, keeping just the last few seconds; it is never saved to disk or sent anywhere. The voice features used to tell speakers apart stay in memory only while the app is open and are deleted when it closes. The app does not use your microphone to listen to you; this feature can be turned off in the settings.</p>
+<p>If the optional <b>Natural Voice Pack</b> (installed separately) is present, Turkish voices are generated on your computer's graphics card by a local voice server. Text is not sent over the internet; the pack only downloads the voice engine and model from GitHub and Hugging Face when it is installed. The character voices are AI-designed and are not the voice of any real person.</p>
+
+<h2>OBS connection</h2>
+<p>The app connects to OBS Studio on the same computer through a local connection (OBS WebSocket). To connect, it only reads the WebSocket password from OBS's own settings file; this password never leaves your computer. The app does not modify your OBS files.</p>
+
+<h2>Stored on your computer</h2>
+<p>Settings, a translation cache (so the same sentence is not translated twice) and a technical log file are kept only on your computer, in the app's data folder. You can delete these files when you uninstall the app.</p>
+
+<h2>Open source</h2>
+<p>The app is free software (AGPL-3.0); anyone can inspect what it does in its source code.</p>
+
+<h2>Children</h2>
+<p>The app does not collect personal information, including from children.</p>
+
+<h2>Changes</h2>
+<p>If this policy changes, this page will be updated and the date above will change.</p>
+
+<h2>Contact</h2>
+<p>Questions: <a href="mailto:appic.studio@outlook.com">appic.studio@outlook.com</a></p>
+</section>
+</main>
+</body>
+</html>

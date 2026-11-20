@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
+  xmlns:desktop="http://schemas.microsoft.com/appx/manifest/desktop/windows10"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  IgnorableNamespaces="uap rescap desktop uap10">
+
+  <Identity Name="{kimlik_adi}" Publisher="{yayinci}" Version="{surum4}" ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>{gorunen_ad}</DisplayName>
+    <PublisherDisplayName>{yayinci_adi}</PublisherDisplayName>
+    <Logo>Assets\StoreLogo.png</Logo>
+  </Properties>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop" MinVersion="10.0.17763.0" MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Resources>
+    <Resource Language="tr-TR" />
+  </Resources>
+
+  <Applications>
+    <Application Id="CanliTurkceAltyazi" Executable="CanliTurkceAltyazi\CanliTurkceAltyazi.exe" EntryPoint="Windows.FullTrustApplication">
+      <uap:VisualElements
+        DisplayName="{gorunen_ad}"
+        Description="{aciklama}"
+        BackgroundColor="transparent"
+        Square150x150Logo="Assets\Square150x150Logo.png"
+        Square44x44Logo="Assets\Square44x44Logo.png">
+        <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png" />
+      </uap:VisualElements>
+      <Extensions>
+        <!-- Windows açılınca başlat: varsayılan KAPALI; kullanıcı Ayarlar > Uygulamalar > Başlangıç'tan açar.
+             uap10:Parameters (Windows 10 2004+): simge durumunda başlar; daha eski sürümlerde pencere açılır. -->
+        <desktop:Extension Category="windows.startupTask" Executable="CanliTurkceAltyazi\CanliTurkceAltyazi.exe"
+                           EntryPoint="Windows.FullTrustApplication" uap10:Parameters="--kucuk">
+          <desktop:StartupTask TaskId="CanliTurkceAltyaziBaslangic" Enabled="false" DisplayName="{gorunen_ad}" />
+        </desktop:Extension>
+      </Extensions>
+    </Application>
+  </Applications>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+    <!-- Karakter sesleri: capture card'ın ses girişi Windows'ta mikrofon sınıfı aygıttır -->
+    <DeviceCapability Name="microphone" />
+  </Capabilities>
+</Package>

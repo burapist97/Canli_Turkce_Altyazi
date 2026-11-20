@@ -1,0 +1,31 @@
+Canlı Türkçe Altyazı
+Copyright (C) 2026 Appic
+
+Bu program özgür yazılımdır: GNU Affero Genel Kamu Lisansı'nın 3. sürümü (ya da tercihinize göre daha sonraki bir
+sürümü) koşullarında yeniden dağıtabilir ve değiştirebilirsiniz. Lisans metni: LICENSE.
+Program HİÇBİR GARANTİ verilmeden dağıtılır; ayrıntılar için LICENSE (bölüm 15 ve 16).
+
+Yöntemleri ve bazı kuralları şu AGPL-3.0 lisanslı projelerden esinlenmiş ya da uyarlanmıştır:
+- CouchSubs, Copyright (C) 2026 Sinan Yorulmaz - https://github.com/yorulmazsinan/couchsubs
+  (altyazı dengeleme fikirleri, Türkçe son düzeltme: "sen/siz" hitabı)
+- GameTranslator - https://gitlab.com/sefflex/GameTranslator (çeviri öncesi/sonrası metin hattı fikirleri)
+
+Program kodu değil, kendi lisanslarıyla birlikte dağıtılan modeller (modeller/ klasörü; kaynak kod deposunda yoktur,
+sürüm sayfasındaki modeller paketiyle ya da paket/ altındaki betiklerle edinilir):
+- OPUS-MT en-tr (Helsinki-NLP/opus-mt-tc-big-en-tr; Tiedemann ve ark., Helsinki Üniversitesi), CC BY 4.0.
+  CTranslate2 int8 biçimine paket/model_hazirla.ps1 ile dönüştürülür.
+- NVIDIA TitaNet-small konuşmacı modeli (sherpa-onnx için ONNX sürümü), CC BY 4.0.
+- voice-gender-classifier (Jaesung Huh), MIT. ONNX dönüşümü Lingolay projesinden alınmıştır (GPL-3.0; GPL-3.0 ile
+  AGPL-3.0 aynı programda birlikte kullanılabilir, AGPL-3.0 bölüm 13).
+- cinsiyet.json: bu projede LibriSpeech (CC BY 4.0) ile eğitildi (paket/cinsiyet_egit.py).
+- Pocket TTS Turkish (Wite Tech; model CC BY 4.0, kod Apache 2.0), Kyutai Pocket TTS (MIT) üzerine kurulu.
+  paket/hafif_ses/model_indir.py sabit sürüm ve SHA-256 ile indirir.
+- Yazı okuma modelleri RapidOCR / PaddleOCR (Apache 2.0) Python paketiyle gelir.
+
+Seslerin hepsi yapaydır: hafif_ses/sesler ve paket/dogal_ses/sesler içindeki sesler yapay zekâyla tariften
+tasarlanmıştır, gerçek bir kişinin sesi değildir.
+
+Kullanılan Python kitaplıklarının lisansları: requirements.txt içindeki paketlerin kendi lisansları; derlenmiş
+programda hafif_ses\LISANSLAR klasörü ve Ayarlar sayfası ("Açık kaynak").
+
+Bu program herhangi bir film, dizi, oyun, yayın servisi veya yayıncıyla bağlantılı değildir.

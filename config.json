@@ -1,0 +1,117 @@
+{
+  "kaynak": {
+    "tip": "ekran",
+    "kamera_index": 0,
+    "kamera_adi": "",
+    "genislik": 1920,
+    "yukseklik": 1080,
+    "ekran_no": 1
+  },
+  "obs": {
+    "port": 4455,
+    "sifre": "",
+    "kaynak_adi": "",
+    "goruntu_genislik": null
+  },
+  "bolge": {
+    "x": 0.12,
+    "y": 0.8,
+    "w": 0.76,
+    "h": 0.15
+  },
+  "ek_bolgeler": [],
+  "ocr": {
+    "motor": "rapidocr",
+    "tesseract_yolu": "tesseract",
+    "parlaklik_esigi": 185,
+    "kontur_gerekli": true,
+    "min_guven": 0.6,
+    "buyutme": 1.5,
+    "hizli": true
+  },
+  "tespit": {
+    "fps": 40,
+    "degisim_esigi": 0.015,
+    "bos_piksel_orani": 0.002,
+    "bos_temizle_sn": 0.07,
+    "ayni_satir_benzerlik": 0.8
+  },
+  "ceviri": {
+    "motor": "cevrimdisi",
+    "yedek_motor": "cevrimdisi",
+    "baglam_satir": 4,
+    "anahtarlar": {
+      "gemini": "",
+      "groq": "",
+      "deepl": "",
+      "claude": "",
+      "llm": ""
+    },
+    "modeller": {},
+    "llm_url": "http://localhost:11434/v1/chat/completions",
+    "llm_model": "qwen2.5:7b",
+    "cumle_birlestir": false
+  },
+  "goruntu": {
+    "port": 38765,
+    "ingilizce_goster": false,
+    "orijinali_kapat": true,
+    "yazi_boyutu": 44,
+    "yazi_tipi": "standart",
+    "yazi_kalinligi": 700,
+    "yazi_rengi": "#ffffff",
+    "kenar": 2,
+    "konum": "orijinal",
+    "konum_x": 0.5,
+    "konum_y": 0.85,
+    "altyazi_goster": true,
+    "yazi_tipi_ozel": "",
+    "italik": false,
+    "buyuk_harf": false,
+    "kenar_rengi": "#000000",
+    "golge": 1,
+    "kutu_rengi": "#000000",
+    "kutu_saydamlik": 0,
+    "kutu_bicimi": "sar",
+    "kutu_kose": 0.25,
+    "kutu_bosluk": 0.35,
+    "harf_araligi": 0,
+    "satir_araligi": 1.2,
+    "hizalama": "orta",
+    "genislik": 0.88,
+    "ingilizce_rengi": "#d9d9d9",
+    "ingilizce_oran": 0.6,
+    "ingilizce_ustte": false,
+    "etiket_rengi": "",
+    "kapak_rengi": "#08080a",
+    "gecis": "yok",
+    "kapak_saydamlik": 1
+  },
+  "dublaj": {
+    "acik": false,
+    "ses": "",
+    "hiz": 1.15,
+    "seviye": 1.0,
+    "okurken_kis": true,
+    "kisma_db": -14,
+    "karakter_sesleri": true,
+    "ses_kaynagi": "otomatik",
+    "dogal_ses": true,
+    "dogal_motor": "otomatik",
+    "ses_uyarla": true
+  },
+  "senaryo": "pc",
+  "hata_ayiklama": false,
+  "ayar_surumu": 3,
+  "kurulum_tamam": false,
+  "uygulama": {
+    "tepsiye_kucult": true,
+    "windows_ile_baslat": false,
+    "tepsi_bilgisi_gosterildi": false
+  },
+  "tam_ekran": {
+    "acik": false,
+    "yerlesim": "ustune",
+    "aralik": 1.0
+  }
+}

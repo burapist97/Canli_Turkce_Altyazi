@@ -1,0 +1,9 @@
+{
+ "gorunen_ad": "Murat",
+ "cinsiyet": "erkek",
+ "tanitim": "Ellilerinde, sakin ve kendinden emin adam; tok ve olgun ses.",
+ "referans": "referans.wav",
+ "tohum": 75267,
+ "sira": 4,
+ "kaynak": "Canlı Türkçe Altyazı için metin tarifinden tasarlanmış yapay sesin (paket/dogal_ses/ses_tasarla.py) Pocket TTS ile kopyası; gerçek bir kişinin sesi değil"
+}

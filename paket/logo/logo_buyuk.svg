@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024"><defs>
+  <linearGradient id="plaka" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#241a44"/><stop offset="1" stop-color="#0c0a17"/></linearGradient>
+  <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2ef0ff"/><stop offset="1" stop-color="#c04dff"/></linearGradient>
+  <linearGradient id="kenar" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2ef0ff" stop-opacity=".55"/><stop offset="1" stop-color="#c04dff" stop-opacity=".55"/></linearGradient>
+  <filter id="parilti" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="20" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect x="8" y="8" width="1008" height="1008" rx="224" fill="url(#plaka)" stroke="url(#kenar)" stroke-width="10"/>
+<g filter="url(#parilti)" fill="none" stroke="url(#neon)" stroke-width="56" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M 196 370 L 196 256 L 310 256"/><path d="M 714 256 L 828 256 L 828 370"/>
+  <path d="M 828 654 L 828 768 L 714 768"/><path d="M 310 768 L 196 768 L 196 654"/>
+</g>
+<g filter="url(#parilti)">
+  <path d="M 446 360 L 446 492 Q 446 506 458 499 L 562 437 Q 574 430 562 423 L 458 361 Q 446 354 446 360 Z" fill="url(#neon)"/>
+  <rect x="290" y="566" width="444" height="60" rx="30" fill="#fff"/>
+  <rect x="372" y="656" width="280" height="60" rx="30" fill="#fff" opacity=".88"/>
+</g></svg>

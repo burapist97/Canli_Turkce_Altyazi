@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="1024" height="1024"><defs>
+  <linearGradient id="plaka" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#1e1636"/><stop offset="1" stop-color="#0b0914"/></linearGradient>
+  <linearGradient id="lav" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ffb03a"/><stop offset=".5" stop-color="#ff5a1f"/><stop offset="1" stop-color="#e0105a"/></linearGradient>
+  <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22e3ff"/><stop offset="1" stop-color="#b44dff"/></linearGradient>
+  <linearGradient id="kirmizi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#ff4b3a"/><stop offset="1" stop-color="#b3001b"/></linearGradient>
+  <filter id="parilti" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="18" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+</defs>
+<rect width="1024" height="1024" rx="224" fill="url(#plaka)"/>
+<g filter="url(#parilti)">
+  <path d="M 512 150 L 830 260 L 800 600 C 780 730 650 820 512 880 C 374 820 244 730 224 600 L 194 260 Z" fill="url(#lav)"/>
+</g>
+<path d="M 512 210 L 772 300 L 748 590 C 732 690 630 764 512 816 C 394 764 292 690 276 590 L 252 300 Z" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="10"/>
+<g fill="#fff" transform="translate(512 420) scale(0.36) translate(-512 -560)"><path d="M 300 330 C 240 330 205 372 196 430 L 150 650 C 136 728 186 790 256 790 C 304 790 334 764 360 724 L 398 666 L 626 666 L 664 724 C 690 764 720 790 768 790 C 838 790 888 728 874 650 L 828 430 C 819 372 784 330 724 330 Z"/></g>
+<g fill="#fff"><rect x="356" y="560" width="312" height="44" rx="22"/><rect x="406" y="630" width="212" height="44" rx="22" opacity=".85"/></g>
+<g fill="#ff5a1f" transform="translate(512 420) scale(0.36) translate(-512 -560)">
+  <rect x="262" y="440" width="34" height="108" rx="8"/><rect x="225" y="477" width="108" height="34" rx="8"/>
+  <circle cx="752" cy="452" r="22"/><circle cx="752" cy="540" r="22"/><circle cx="708" cy="496" r="22"/><circle cx="796" cy="496" r="22"/>
+</g></svg>

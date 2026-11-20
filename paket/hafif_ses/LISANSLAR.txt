@@ -1,0 +1,41 @@
+Canlı Türkçe Altyazı - doğal sesler
+Bu klasördeki (hafif_ses) ses motoru, model ve seslerle birlikte dağıtılan üçüncü taraf yazılım ve veriler
+=========================================================================================================
+
+MODEL (model klasörü)
+  Pocket TTS Turkish - Wite Tech
+  Lisans : Creative Commons Attribution 4.0 International (CC BY 4.0)
+           https://creativecommons.org/licenses/by/4.0/
+  Kaynak : https://huggingface.co/wite-tech/pocket-tts-turkish
+           (indirilen sürüm ve dosyaların SHA-256 özetleri: model\kaynak.json)
+  Kyutai Pocket TTS üzerine kuruludur: https://github.com/kyutai-labs/pocket-tts
+  Model dosyaları değiştirilmeden dağıtılmaktadır.
+
+SESLER
+  model\voices\*.wav      Modelle birlikte gelen 6 hazır ses (Wite Tech). Yapaydır: metin tarifinden
+                          tasarlanmıştır, gerçek bir kişinin kaydı değildir.
+  sesler\*\referans.wav   Canlı Türkçe Altyazı için yapay zekâ ile metin tarifinden tasarlanmış 6 ses
+                          (VoxCPM2 ses tasarımı; OpenBMB, Apache 2.0). Gerçek bir kişinin sesi ya da kaydı
+                          değildir; Pocket TTS bu kayıtlardan sesi kopyalar.
+  Uygulama hiçbir gerçek kişinin sesini kopyalamaz ve kullanıcıdan ses kaydı almaz.
+
+YAZILIM (motor klasörü: cta_ses.exe ve _internal)
+  pocket-tts-turkish 0.1.0   Wite Tech                       Apache-2.0
+  pocket-tts 3.3.0           Kyutai                          MIT
+  PyTorch 2.15.0 (CPU)       PyTorch katkıcıları             BSD-3-Clause + üçüncü taraf bileşenleri
+  NumPy, SciPy               NumPy / SciPy geliştiricileri   BSD-3-Clause
+  sentencepiece              Google                          Apache-2.0
+  tokenizers, safetensors,   Hugging Face                    Apache-2.0
+  huggingface_hub
+  soundfile                  Bastian Bechtold ve ark.        BSD-3-Clause
+  libsndfile                 Erik de Castro Lopo ve ark.     LGPL-2.1 ya da sonrası
+      Ayrı bir kitaplık dosyası (libsndfile_x64.dll) olarak, değiştirilmeden dağıtılır; aynı arayüze sahip
+      başka bir sürümüyle değiştirilebilir. Kaynak: https://github.com/libsndfile/libsndfile
+      Lisans metni: libsndfile\COPYING
+  Python 3.13                Python Software Foundation      PSF License
+  Öteki bağımlılıklar (pydantic, PyYAML, requests, sympy, networkx, einops...) kendi lisanslarıyla.
+
+  Her paketin kendi lisans dosyaları bu klasörün alt klasörlerindedir (<paket>-<sürüm>). Lisans dosyası paketinin
+  içinde gelmeyenler (sentencepiece, tokenizers) Apache-2.0 lisanslıdır; metni: pocket_tts_turkish-0.1.0\LICENSE
+
+Ses motoru yalnızca bu bilgisayarda çalışır; internete bağlanmaz, ses ya da metin göndermez.

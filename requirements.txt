@@ -1,0 +1,17 @@
+opencv-python
+numpy
+requests
+mss
+rapidocr
+onnxruntime
+pywebview
+winrt-runtime ; sys_platform == "win32"
+winrt-Windows.Media.SpeechSynthesis ; sys_platform == "win32"
+winrt-Windows.Storage.Streams ; sys_platform == "win32"
+winrt-Windows.Foundation ; sys_platform == "win32"
+winrt-Windows.Foundation.Collections ; sys_platform == "win32"
+ctranslate2
+sentencepiece
+soundcard ; sys_platform == "win32"
+sherpa-onnx
+comtypes ; sys_platform == "win32"

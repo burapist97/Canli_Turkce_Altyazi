@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Canlı Türkçe Altyazı</title>
+<style>
+  html, body { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+  .kapak { position: absolute; display: none; border-radius: 10px; }
+  .kutu {
+    position: absolute; left: 0; right: 0; display: none;
+    text-align: center; padding: 0 6%;
+    box-sizing: border-box;
+  }
+  /* Yazı tipi, renk, kenar çizgisi, kutu ve boyut altyazi_stil.js ile ayarlanır (arayüzün önizlemesiyle aynı kod) */
+  .tr { font-family: "Segoe UI", Arial, sans-serif; font-weight: 700; color: #fff; }
+  .en { margin-top: 0.15em; display: none; }
+  #bilgi {
+    position: absolute; top: 3%; right: 2%; max-width: 40%; display: none;
+    font: 600 18px "Segoe UI", Arial, sans-serif; color: #fff;
+    background: rgba(28, 28, 30, 0.86); border-left: 4px solid #2ef0ff;
+    padding: 10px 14px; border-radius: 10px;
+  }
+  /* Tüm ekran kipi: her İngilizce yazının üstüne / yanına konan Türkçe (tam_ekran.py) */
+  .tam { position: absolute; box-sizing: border-box; line-height: 1.16; padding: 0 0.25em; border-radius: 0.2em; overflow-wrap: anywhere; }
+  .yumusak { animation: belir 90ms ease-out; }
+  @keyframes belir { from { opacity: 0 } to { opacity: 1 } }
+</style>
+</head>
+<body>
+<div id="bilgi"></div>
+<script src="/altyazi_stil.js"></script>
+<script>
+  // Bu sayfanın ait olduğu program sürümü (sunucu doldurur). Program güncellenince açık kalan eski sayfa
+  // yeni ayarları anlamaz; sürüm farkını görünce kendini yeniler.
+  const SAYFA_SURUMU = "__SURUM__";
+
+  // Alan 0: ana altyazı (ayar.bolge). Alan 1..: ek çeviri alanları (ayar.ek_bolgeler), her biri kendi yerinde.
+  let ayar = { bolge: { x: 0.12, y: 0.8, w: 0.76, h: 0.15 }, ek_bolgeler: [], orijinali_kapat: true, ingilizce_goster: false, yazi_boyutu: 44, altyazi_goster: true };
+  // Türkçe yazı İngilizcesiyle birlikte kalkar; yalnız çok kısa görünen yazı (çeviri geç geldiyse) göz kırpmasın
+  const MIN_GOSTERIM = 300, GEC_GELEN_SURE = 2500;
+  const alanlar = {};  // no -> { kapak, kutu, el, aktifId, zaman, zamanlayici, kapakVar, kutuGoster, son }
+
+  function alanAl(no) {
+    if (alanlar[no]) return alanlar[no];
+    const kapak = document.createElement("div"); kapak.className = "kapak";
+    const kutu = document.createElement("div"); kutu.className = "kutu";
+    const el = AltyaziStil.kur(kutu);
+    document.body.append(kapak, kutu);
+    alanlar[no] = { kapak, kutu, el, aktifId: null, zaman: 0, zamanlayici: null, kapakVar: false, kutuGoster: "block", istenenUst: "auto", son: null };
+    yerlestirAlan(no);
+    return alanlar[no];
+  }
+
+  function bolgesi(no) { return no === 0 ? ayar.bolge : (ayar.ek_bolgeler || [])[no - 1]; }
+
+  function yerlestirAlan(no) {
+    const a = alanlar[no], b = bolgesi(no);
+    if (!a || !b) return;
+    const olcek = window.innerHeight / 1080;
+    const uzunluk = (px) => (px * olcek).toFixed(2) + "px";
+    // Ek alanlar (2., 3. ... çeviri alanı): kendi görünümü ayarlanmışsa (b.gorunum) o; ayarlanmamışsa kendi yerinde,
+    // üstü kapalı ve yazı alan yüksekliğine göre sınırlı (genelde küçük kutular: görev yazısı, mesaj)
+    const ozel = no > 0 && b.gorunum ? b.gorunum : null;
+    const alanAyari = no === 0 ? ayar : Object.assign({}, ayar, { orijinali_kapat: true, konum: "orijinal" }, ozel || {});
+    const boyut = no === 0 ? ayar.yazi_boyutu
+      : (ozel && ozel.yazi_boyutu ? ozel.yazi_boyutu : Math.min(ayar.yazi_boyutu * 0.8, Math.max(18, b.h * 1080 * 0.42)));
+    a.ayar = alanAyari;
+    AltyaziStil.uygula(a.el, alanAyari, uzunluk, boyut);
+    a.el.en.style.display = alanAyari.ingilizce_goster ? "block" : "none";
+    const y = AltyaziStil.yerlesim(alanAyari, b);
+    a.kapakVar = !!y.kapak; a.kutuGoster = y.goster;
+    if (y.kapak) Object.assign(a.kapak.style, y.kapak);
+    Object.assign(a.kutu.style, { flexDirection: "", justifyContent: "" }, y.kutu);
+    a.istenenUst = y.kutu.top;
+    if (a.son) AltyaziStil.yaz(a.el, a.son.tr, a.son.en, alanAyari);  // konuşmacı adı rengi değişmiş olabilir
+    if (a.aktifId !== null) {  // ekranda yazı varken ayar değişti: hemen yeni yerinde görünsün
+      a.kutu.style.display = y.goster;
+      a.kapak.style.display = y.kapak ? "block" : "none";
+      tasmaDuzelt(no);
+    }
+  }
+
+  // Serbest konumda (yazının ortası verilen noktada) büyük ya da çok satırlı yazı ekranın altından/üstünden taşmasın
+  function tasmaDuzelt(no) {
+    const a = alanlar[no];
+    if (!a || !a.ayar || a.ayar.konum !== "serbest") return;
+    a.kutu.style.top = a.istenenUst;
+    const r = a.kutu.getBoundingClientRect(), pay = Math.max(4, window.innerHeight * 0.008);
+    if (!r.height || r.height >= window.innerHeight - 2 * pay) return;
+    if (r.bottom > window.innerHeight - pay) a.kutu.style.top = (window.innerHeight - pay - r.height / 2) + "px";
+    else if (r.top < pay) a.kutu.style.top = (pay + r.height / 2) + "px";
+  }
+
+  function yerlestir() { Object.keys(alanlar).forEach((no) => yerlestirAlan(+no)); }
+
+  function goster(olay) {
+    const no = olay.alan || 0;
+    if (!bolgesi(no) || ayar.altyazi_goster === false) return;  // "yalnızca Türkçe ses": yazı yok, oyunun altyazısı açık kalır
+    const a = alanAl(no);
+    clearTimeout(a.zamanlayici);
+    const yeniSatir = a.aktifId !== olay.id;  // aynı satırın düzeltmesi geldiyse yazı yerinde değişir (kırpışma yok)
+    a.aktifId = olay.id;
+    a.son = { tr: olay.tr, en: olay.en || "" };
+    AltyaziStil.yaz(a.el, olay.tr, olay.en || "", a.ayar || ayar);
+    a.kutu.style.display = a.kutuGoster;
+    a.kapak.style.display = a.kapakVar ? "block" : "none";
+    tasmaDuzelt(no);
+    if (yeniSatir && (a.ayar || ayar).gecis === "yumusak") { a.kutu.classList.remove("yumusak"); void a.kutu.offsetWidth; a.kutu.classList.add("yumusak"); }
+    if (yeniSatir) a.zaman = Date.now();
+    if (olay.temizlendi) a.zamanlayici = setTimeout(() => gizle(no), GEC_GELEN_SURE);
+  }
+
+  function gizle(no) {
+    const a = alanlar[no]; if (!a) return;
+    a.kutu.style.display = "none"; a.kapak.style.display = "none"; a.aktifId = null; a.son = null;
+  }
+
+  function temizle(olay) {
+    if (olay.hepsi) { Object.keys(alanlar).forEach((no) => { clearTimeout(alanlar[no].zamanlayici); gizle(+no); }); tamGoster({ kutular: [] }); return; }
+    const no = olay.alan || 0, a = alanlar[no];
+    // Eski bir satırın temizlenmesi yeni satırı silmez. Daha YENİ bir satırın temizlenmesi ekrandakini de siler:
+    // devam eden yazıda önceki satır "temizle" almadan yerini yenisine bırakır; yenisinin çevirisi gelmeden yazı
+    // kalkarsa eskisi ekranda kalmasın.
+    if (!a || a.aktifId === null || olay.id < a.aktifId) return;
+    const kalan = Math.max(0, MIN_GOSTERIM - (Date.now() - a.zaman));
+    clearTimeout(a.zamanlayici);
+    if (kalan <= 0) gizle(no); else a.zamanlayici = setTimeout(() => gizle(no), kalan);
+  }
+
+  // ---------- tüm ekran kipi: {tip: "tam", yerlesim: ustune | ustunde | altinda, kutular: [{id, x, y, w, h, satir, tr}]} ----------
+  const tamKutular = {};
+  let sonTam = null;
+  function tamGoster(olay) {
+    sonTam = olay;
+    const a = AltyaziStil.tamamla(ayar), W = window.innerWidth, H = window.innerHeight, gorulen = {};
+    const gizli = ayar.altyazi_goster === false;
+    (gizli ? [] : (olay.kutular || [])).forEach((k) => {
+      let e = tamKutular[k.id];
+      if (!e) { e = document.createElement("div"); e.className = "tam"; document.body.appendChild(e); tamKutular[k.id] = e; }
+      gorulen[k.id] = true;
+      const s = e.style, satirPx = k.h * H / Math.max(1, k.satir);
+      e.textContent = k.tr;
+      e.dataset.en = k.en || "";
+      s.fontFamily = AltyaziStil.aile(a);
+      s.fontWeight = String(Math.min(a.yazi_kalinligi, 700));
+      s.fontStyle = a.italik ? "italic" : "normal";
+      s.fontSize = Math.max(11, Math.min(72, satirPx * 0.8)).toFixed(1) + "px";
+      s.color = a.yazi_rengi;
+      s.left = (k.x * W).toFixed(1) + "px";
+      s.maxWidth = Math.min(W, Math.max(k.w * W * 1.35, k.w * W + 90)).toFixed(1) + "px";
+      if (olay.yerlesim === "ustune") {
+        // İngilizcenin tam üstüne: kutu yazıyı kapatır (kapatma rengi, opak)
+        s.top = (k.y * H).toFixed(1) + "px"; s.transform = "none";
+        s.minWidth = (k.w * W).toFixed(1) + "px"; s.minHeight = (k.h * H).toFixed(1) + "px";
+        s.background = a.kapak_rengi;
+      } else {
+        // hemen üstünde / hemen altında: İngilizce görünür kalır; okunsun diye arkası koyu
+        s.minWidth = "0"; s.minHeight = "0";
+        s.top = ((olay.yerlesim === "ustunde" ? k.y : k.y + k.h) * H).toFixed(1) + "px";
+        s.transform = olay.yerlesim === "ustunde" ? "translateY(-100%)" : "none";
+        s.background = AltyaziStil.rgba(a.kutu_rengi, Math.max(a.kutu_saydamlik, 0.78));
+      }
+      const r = e.getBoundingClientRect();  // ekranın sağından / üstünden taşmasın
+      if (r.right > W) s.left = Math.max(0, W - r.width).toFixed(1) + "px";
+      if (r.top < 0) { s.top = ((k.y + k.h) * H).toFixed(1) + "px"; s.transform = "none"; }
+      else if (r.bottom > H && olay.yerlesim === "altinda") { s.top = (k.y * H).toFixed(1) + "px"; s.transform = "translateY(-100%)"; }
+    });
+    Object.keys(tamKutular).forEach((id) => { if (!gorulen[id]) { tamKutular[id].remove(); delete tamKutular[id]; } });
+  }
+
+  // Kısa durum notu (ör. çeviri yedek motora geçti) — 8 sn sağ üstte
+  let bilgiZamanlayici = null;
+  function bilgiGoster(metin) {
+    const e = document.getElementById("bilgi");
+    e.textContent = metin; e.style.display = "block";
+    e.style.fontSize = Math.max(13, 18 * window.innerHeight / 1080) + "px";
+    clearTimeout(bilgiZamanlayici);
+    bilgiZamanlayici = setTimeout(() => { e.style.display = "none"; }, 8000);
+  }
+
+  // Program güncellendi ama bu sayfa eski: bir kez yenile (art arda yenileme döngüsüne girmesin diye 30 sn'de bir)
+  function eskiSayfaYenile(sunucuSurumu) {
+    if (!sunucuSurumu || SAYFA_SURUMU.indexOf("__") === 0 || sunucuSurumu === SAYFA_SURUMU) return false;
+    try {
+      const son = +sessionStorage.getItem("cta_yenileme") || 0;
+      if (Date.now() - son < 30000) return false;
+      sessionStorage.setItem("cta_yenileme", String(Date.now()));
+    } catch (e) { return false; }
+    location.reload();
+    return true;
+  }
+
+  function baglan() {
+    const kaynak = new EventSource("/olaylar");
+    kaynak.onmessage = (e) => {
+      const olay = JSON.parse(e.data);
+      if (olay.tip === "ayar") {
+        if (eskiSayfaYenile(olay.surum)) return;
+        ayar = Object.assign(ayar, olay);
+        // silinen ek alanların kutuları kaldırılır
+        Object.keys(alanlar).forEach((no) => { if (+no > 0 && !bolgesi(+no)) { alanlar[no].kapak.remove(); alanlar[no].kutu.remove(); delete alanlar[no]; } });
+        alanAl(0); yerlestir();
+        if (ayar.altyazi_goster === false) Object.keys(alanlar).forEach((no) => { clearTimeout(alanlar[no].zamanlayici); gizle(+no); });
+        if (sonTam) tamGoster(sonTam);
+      }
+      else if (olay.tip === "tam") tamGoster(olay);
+      else if (olay.tip === "satir") goster(olay);
+      else if (olay.tip === "temizle") temizle(olay);
+      else if (olay.tip === "bilgi") bilgiGoster(olay.metin);
+    };
+    kaynak.onerror = () => { kaynak.close(); setTimeout(baglan, 1000); };
+  }
+  window.addEventListener("resize", () => { yerlestir(); if (sonTam) tamGoster(sonTam); });
+  alanAl(0);
+  baglan();
+</script>
+</body>
+</html>

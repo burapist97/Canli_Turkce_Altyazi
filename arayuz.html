@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Canlı Türkçe Altyazı</title>
+<link rel="stylesheet" href="/arayuz.css">
+</head>
+<body>
+
+<aside id="menu">
+  <div class="marka">
+    <svg viewBox="0 0 24 24" fill="none" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2ef0ff"/><stop offset="1" stop-color="#c04dff"/></linearGradient></defs><path d="M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5" stroke="url(#lg)" stroke-width="2.6"/><path d="M7.5 12.5h9M9.5 16h5" stroke="#fff" stroke-width="2.4"/></svg>
+    <div><b>Canlı Türkçe Altyazı</b><span>Film, dizi, oyun, her şey</span></div>
+  </div>
+  <nav id="nav">
+    <button data-sayfa="ana"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v8a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>Ana sayfa</button>
+    <button data-sayfa="alan"><svg viewBox="0 0 24 24"><rect x="3" y="4.5" width="18" height="12" rx="2"/><path d="M7 13h10M9 20h6M12 16.5V20"/></svg>Ekran ve altyazı alanı</button>
+    <button data-sayfa="gorunum"><svg viewBox="0 0 24 24"><path d="M5 19l5.5-14h3L19 19M8 13h8"/></svg>Görünüm</button>
+    <button data-sayfa="ceviri"><svg viewBox="0 0 24 24"><path d="M4 6h9M8.5 4v2c0 4-2 7-5 8.500M6 10c1 2 3 3.500 5.500 4M13 20l4-9 4 9M14.500 17h5"/></svg>Çeviri</button>
+    <button data-sayfa="ses"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5l4.500 3.500V6L7.500 9.500H4z"/><path d="M15.500 9a4.500 4.500 0 0 1 0 6M18 6.500a8 8 0 0 1 0 11"/></svg>Seslendirme<span class="rozet sari nav-rozet magaza-yalniz">Geliştiriliyor</span></button>
+    <button data-sayfa="ayarlar"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v2.500M12 18.500V21M3 12h2.500M18.500 12H21M5.600 5.600l1.800 1.800M16.600 16.600l1.800 1.800M5.600 18.400l1.800-1.800M16.600 7.400l1.800-1.800"/></svg>Ayarlar</button>
+  </nav>
+  <div class="menu-alt">
+    <div id="menu-durum"><span class="nokta" id="menu-nokta"></span><span id="menu-durum-yazi">Kapalı</span></div>
+    <span id="surum"></span> · Appic
+  </div>
+</aside>
+
+<main>
+  <!-- ================= ANA SAYFA ================= -->
+  <section class="sayfa" id="s-ana">
+    <div class="uyari kirmizi" id="u-hata"></div>
+    <div class="uyari sari" id="u-ceviri"></div>
+    <div class="uyari sari" id="u-not"></div>
+    <div class="sahne-kart">
+      <div style="flex:1; min-width:0;">
+        <div class="sira"><span class="nokta" id="ana-nokta"></span><b id="ana-durum">Kapalı</b></div>
+        <h3 id="ana-baslik">Başlamaya hazır</h3>
+        <p id="ana-aciklama">Oyunu açın, sonra Başlat'a basın. İngilizce altyazı çıktığı anda Türkçesi üstünde belirir.</p>
+      </div>
+      <button class="dugme ana buyuk" id="ana-dugme">Başlat</button>
+    </div>
+
+    <div class="kart">
+      <div class="sira">
+        <div style="flex:1; min-width:220px;"><b>Ne gösterilsin?</b><div class="aciklama">Türkçe yazı, Türkçe seslendirme ya da ikisi birden.</div><div class="aciklama" id="ana-ses-bilgi" style="color:var(--vurgu);"></div><div class="aciklama magaza-yalniz" id="ana-ses-gelisiyor" style="margin-top:5px;"><span class="rozet sari">Geliştiriliyor</span> Türkçe seslendirme henüz geliştirme aşamasında. Altyazı bundan etkilenmez.</div></div>
+        <div class="secim" id="mod">
+          <button data-v="altyazi">Türkçe yazı</button><button data-v="ikisi">Yazı + ses</button><button data-v="ses">Yalnızca ses</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="olcu">
+      <div><b id="o-okuma">–</b><span>Yazıyı okuma (ms)</span></div>
+      <div><b id="o-ceviri">–</b><span>Çeviri (ms)</span></div>
+      <div><b id="o-okunan">0</b><span>Okunan satır</span></div>
+      <div><b id="o-motor">–</b><span>Çeviri motoru</span></div>
+    </div>
+
+    <div class="kart">
+      <h2>Son satırlar</h2>
+      <div id="satirlar"><div class="bos-not">Henüz altyazı yok. Başlattıktan sonra çevrilen satırlar burada görünür.</div></div>
+    </div>
+
+    <div class="uyari mavi acik">
+      <b>İpucu:</b> Film ve videolarda tarayıcının ya da oynatıcının tam ekranı sorunsuz çalışır. Oyunlarda görüntü ayarını <b>Kenarlıksız pencere</b> (Borderless) yapın; "Özel tam ekran"da Türkçe yazı oyunun üstünde görünemez.
+      Bu pencereyi <b>küçültünce</b> program saatin yanındaki simgeye iner ve çalışmaya devam eder (hızlı ayarlar: simgeye sağ tık); <b>kapatınca</b> tamamen kapanır.
+    </div>
+  </section>
+
+  <!-- ================= EKRAN VE ALAN ================= -->
+  <section class="sayfa" id="s-alan">
+    <h1>Ekran ve altyazı alanı</h1>
+    <p class="alt-baslik">Program ekranda yalnızca gösterdiğiniz bölgelere bakar (film, dizi, video ya da oyun altyazısı). Bölge ne kadar dar olursa okuma o kadar hızlı ve doğru olur. İsterseniz ekranın tamamını da çevirtebilirsiniz.</p>
+    <div class="adimlar" id="kurulum-adimlar" style="display:none;">
+      <div><b><i>1</i>Ekranı seçin</b>Tek ekranınız varsa seçili gelir.</div>
+      <div><b><i>2</i>Altyazının yerini gösterin</b>Ekranda altyazı varken "Altyazıyı bul"a basın ya da fareyle kutu çizin.</div>
+      <div><b><i>3</i>Kurulumu bitirin</b>Sonradan buradan değiştirebilirsiniz.</div>
+    </div>
+    <div class="kart">
+      <div class="sira">
+        <div style="flex:1; min-width:240px;"><b>Görüntü nereden gelsin?</b><div class="aciklama" id="kt-aciklama"></div></div>
+        <div class="secim" id="kt-tur"><button data-v="pc">Bu bilgisayarın ekranı</button><button data-v="konsol_obs">Konsol (PlayStation / Xbox) + OBS</button></div>
+      </div>
+    </div>
+    <div id="obs-kartlari" style="display:none;">
+      <div class="kart">
+        <div class="sira" style="margin-bottom:10px;"><h2 style="margin:0;">OBS bağlantısı</h2><span class="rozet" id="obs-rozet">Aranıyor…</span><span class="bosluk"></span><button class="dugme kucuk" id="obs-yenile">Yeniden dene</button></div>
+        <div class="aciklama" id="obs-durum">Konsolun görüntüsü capture card ile OBS'e gelir; program görüntüyü OBS'ten alır, Türkçe yazıyı da OBS'teki görüntünün üstüne koyar.</div>
+        <div class="uyari sari" id="obs-ws-yardim" style="margin-top:10px;">OBS'te bir kez şunu yapın: <b>Araçlar</b> menüsü → <b>WebSocket Sunucu Ayarları</b> → <b>WebSocket sunucusunu etkinleştir</b> kutusunu işaretleyin → Tamam. (İngilizce OBS: Tools → WebSocket Server Settings → Enable WebSocket server.) Sonra kendiliğinden bağlanırım.</div>
+        <div class="uyari sari" id="obs-yok-yardim" style="margin-top:10px;">OBS Studio bu bilgisayarda bulunamadı. <a id="obs-indir">obsproject.com</a> adresinden indirip kurun, capture card'ı OBS'e kaynak olarak ekleyin ve OBS'i açık bırakın.</div>
+        <details style="margin-top:10px;"><summary class="aciklama" style="cursor:pointer;">Kendiliğinden bağlanmıyorsa: kapı ve şifreyi elle girin</summary>
+          <div class="sira" style="margin-top:8px;"><input type="text" id="obs-port" placeholder="Kapı (4455)" style="width:120px;"><input type="password" id="obs-sifre" placeholder="OBS WebSocket şifresi (yoksa boş)" style="flex:1;" autocomplete="off"><button class="dugme kucuk" id="obs-baglan">Bağlan</button></div>
+        </details>
+      </div>
+      <div class="kart">
+        <div class="sira" style="margin-bottom:10px;"><div style="flex:1;"><h2 style="margin:0 0 2px;">Oyunun görüntüsü</h2><div class="aciklama">OBS'teki kaynaklardan konsolun görüntüsünü (capture card) seçin.</div></div><button class="dugme kucuk" id="obs-kaynak-yenile">Yenile</button></div>
+        <div id="obs-kaynaklar"><div class="bos-not">Önce OBS'e bağlanılmalı.</div></div>
+      </div>
+      <div class="kart">
+        <div class="ayar"><div><b>Türkçe yazıyı OBS'e ekle</b><div class="aciklama" id="obs-katman-durum">OBS'teki sahneye "Türkçe Altyazı" adında bir tarayıcı kaynağı eklenir ve en üste alınır. Kurulumu bitirirken kendiliğinden de eklenir.</div></div><button class="dugme" id="obs-katman">OBS'e ekle</button></div>
+        <div class="ayar"><div><b>Oyunu tam ekran göster</b><div class="aciklama" id="obs-projektor-durum">OBS'in görüntüsünü (oyun + Türkçe yazı) seçtiğiniz ekranda tam ekran açar. Kapatmak için o ekranda Esc.</div></div><div class="sira" id="obs-monitorler"></div></div>
+      </div>
+    </div>
+    <div class="kart" id="ekran-karti">
+      <h2>Ekran</h2>
+      <div id="ekranlar"><div class="bos-not">Ekranlar aranıyor…</div></div>
+    </div>
+    <div class="kart" id="te-kart">
+      <div class="sira">
+        <div style="flex:1; min-width:240px;"><b>Ne çevrilsin?</b><div class="aciklama" id="te-aciklama"></div></div>
+        <div class="secim" id="te-kip"><button data-v="alan">Seçtiğim alanlar</button><button data-v="tam">Tüm ekran</button></div>
+      </div>
+      <div id="te-secenekler" style="display:none; margin-top:12px;">
+        <div class="satir"><label>Türkçe nereye yazılsın</label><div class="secim" id="te-yerlesim"><button data-v="ustune">İngilizcenin üstüne</button><button data-v="ustunde">Hemen üstüne</button><button data-v="altinda">Hemen altına</button></div></div>
+        <div class="satir"><label>Tarama sıklığı</label><div class="secim" id="te-aralik"><button data-v="0.5">Sık (0,5 sn)</button><button data-v="1">Dengeli (1 sn)</button><button data-v="2">Seyrek (2 sn)</button></div></div>
+        <p class="aciklama" style="margin:6px 0 0;">Ekranın tamamı aralıklı okunur; bulunan her İngilizce yazının Türkçesi yerine yazılır. Web sayfası, oyun menüsü, program arayüzü için uygundur. Film ve oyun <b>altyazısı</b> için "Seçtiğim alanlar" daha hızlıdır (yazı çıktığı anda çevrilir) ve seslendirme yalnız onda çalışır. Çok küçük yazılar okunamayabilir.</p>
+      </div>
+    </div>
+    <div id="alan-kartlari">
+    <div class="kart">
+      <div class="sira" style="margin-bottom:12px;">
+        <h2 style="margin:0;">Altyazı alanı</h2><span class="bosluk"></span>
+        <button class="dugme kucuk" id="al-yenile">Görüntüyü yenile</button>
+        <button class="dugme kucuk" id="al-bul">Altyazıyı bul</button>
+        <button class="dugme kucuk" id="al-dene">Okumayı dene</button>
+      </div>
+      <div id="cizim"><img id="cizim-resim" alt=""></div>
+      <p class="aciklama" style="margin:10px 0 0;">Seçili alanın kutusunu değiştirmek için görüntünün üstünde fareyle yeni bir kutu çizin.</p>
+      <div class="sonuc-kutu sec-yazi" id="al-sonuc"></div>
+    </div>
+    <div class="kart">
+      <div class="sira" style="margin-bottom:10px;">
+        <div style="flex:1;"><h2 style="margin:0 0 2px;">Alanlar</h2><div class="aciklama">Birden çok alan seçebilirsiniz: ana altyazıya ek olarak görev yazısı, mesaj kutusu, ikinci bir altyazı gibi başka yerler de çevrilir. "Alan ekle"ye basıp görüntünün üstünde kutusunu çizin.</div></div>
+        <button class="dugme kucuk" id="al-ekle">+ Alan ekle</button>
+      </div>
+      <div id="alan-liste"></div>
+    </div>
+    </div>
+    <div class="sira">
+      <span class="bosluk"></span>
+      <span class="aciklama" id="al-durum"></span>
+      <button class="dugme ana" id="al-kaydet">Kaydet</button>
+    </div>
+  </section>
+
+  <!-- ================= GÖRÜNÜM ================= -->
+  <section class="sayfa" id="s-gorunum">
+    <h1>Görünüm</h1>
+    <p class="alt-baslik">Türkçe altyazının ekranda nasıl görüneceğini ayarlayın. Değişiklikler anında kaydedilir; altyazı çalışıyorsa ekranda da hemen görünür.</p>
+    <div class="kart" id="g-hedef-kart" style="display:none;">
+      <div class="sira"><div style="flex:1; min-width:220px;"><b>Hangi alanın görünümü?</b><div class="aciklama">Her çeviri alanının yeri, boyutu, rengi ve arka planı ayrı ayarlanabilir.</div></div>
+        <div class="secim" id="g-hedef"></div></div>
+    </div>
+    <div class="gorunum">
+      <div class="onizleme-sut">
+        <div id="onizleme">
+          <div id="on-arka" class="gece"></div>
+          <div id="on-kapak"></div>
+          <div id="on-ing"></div>
+          <div id="on-kutu"></div>
+        </div>
+        <div class="sira" style="margin-top:10px;">
+          <div class="secim" id="on-zemin"><button data-v="gece" class="secili">Gece</button><button data-v="gunduz">Gündüz</button><button data-v="koyu">Koyu</button><button data-v="oyun">Oyunum</button></div>
+          <span class="bosluk"></span>
+          <span class="aciklama">Yazıyı sürükleyerek yerini değiştirebilirsiniz.</span>
+        </div>
+        <div class="kart" style="margin-top:14px;">
+          <h2>Hazır görünümler</h2>
+          <div class="hazirlar" id="g-hazir"></div>
+        </div>
+      </div>
+
+      <div>
+        <details class="grup" open>
+          <summary>Yazı</summary>
+          <div>
+            <div class="satir"><label>Yazı tipi</label><select data-g="yazi_tipi" id="g-yazi-tipi"></select></div>
+            <div class="satir" id="g-ozel-satir" style="display:none;"><label>Yüklü yazı tipi</label><select data-g="yazi_tipi_ozel" id="g-ozel"></select></div>
+            <div class="kay"><label>Boyut</label><input type="range" data-g="yazi_boyutu" min="16" max="120" step="1"><output></output></div>
+            <div class="kay"><label>Kalınlık</label><input type="range" data-g="yazi_kalinligi" min="300" max="900" step="100"><output></output></div>
+            <div class="satir"><label>Renk</label><div class="renkler" data-renk="yazi_rengi" data-liste="RENKLER"></div></div>
+            <div class="kay"><label>Harf aralığı</label><input type="range" data-g="harf_araligi" min="-0.03" max="0.2" step="0.01" data-carp="100"><output></output></div>
+            <div class="kay"><label>Satır aralığı</label><input type="range" data-g="satir_araligi" min="1" max="1.8" step="0.05" data-ondalik="2"><output></output></div>
+            <div class="ayar"><div>Eğik (italik)</div><label class="anahtar"><input type="checkbox" data-g="italik"><i></i></label></div>
+            <div class="ayar"><div>Hepsi büyük harf</div><label class="anahtar"><input type="checkbox" data-g="buyuk_harf"><i></i></label></div>
+          </div>
+        </details>
+
+        <details class="grup" open>
+          <summary>Arka plan</summary>
+          <div>
+            <div class="uyari sari" id="g-serit-not">Türkçe yazı şu an İngilizcenin tam üstüne yazılıyor; arkasındaki şerit İngilizceyi kapatıyor. Şeridi saydamlaştırabilirsiniz: %100 tamamen kapatır, azaltınca hafif bir arka plan kalır, %0'da hiç arka plan olmaz (Türkçe doğrudan İngilizcenin üstünde durur).
+              <div class="kay" style="margin-top:6px;"><label>Şeridin saydamlığı</label><input type="range" data-g="kapak_saydamlik" min="0" max="1" step="0.01" data-carp="100" data-birim="%"><output></output></div>
+              <div class="satir"><label>Şeridin rengi</label><div class="renkler" data-renk="kapak_rengi" data-liste="KAPAK_RENKLERI"></div></div>
+              <div style="margin-top:8px;"><button class="dugme kucuk" id="g-serit-kaldir">Şeridi kaldır: Türkçe, İngilizcenin hemen üstünde dursun</button></div>
+              <div class="aciklama" style="margin-top:8px;">Aşağıdaki kutu ayarları yalnız şerit kaldırıldığında ya da yazı başka bir yere taşındığında geçerlidir.</div></div>
+            <div class="kay"><label>Saydamlık</label><input type="range" data-g="kutu_saydamlik" min="0" max="1" step="0.01" data-carp="100" data-birim="%"><output></output></div>
+            <p class="aciklama" style="margin:0 0 6px;">%0: arka plan yok (yalnız yazı). %50: yarı saydam. %100: tam dolu.</p>
+            <div class="satir"><label>Renk</label><div class="renkler" data-renk="kutu_rengi" data-liste="KUTU_RENKLERI"></div></div>
+            <div class="satir"><label>Biçim</label><div class="secim" data-g="kutu_bicimi"><button data-v="sar">Yazıyı saran kutu</button><button data-v="serit">Boydan boya şerit</button></div></div>
+            <div class="kay"><label>Köşe yuvarlaklığı</label><input type="range" data-g="kutu_kose" min="0" max="1" step="0.05" data-carp="100" data-birim="%"><output></output></div>
+            <div class="kay"><label>İç boşluk</label><input type="range" data-g="kutu_bosluk" min="0" max="1" step="0.05" data-carp="100" data-birim="%"><output></output></div>
+          </div>
+        </details>
+
+        <details class="grup">
+          <summary>Kenar çizgisi ve gölge</summary>
+          <div>
+            <div class="kay"><label>Kenar kalınlığı</label><input type="range" data-g="kenar" min="0" max="4" step="0.25" data-ondalik="2"><output></output></div>
+            <div class="satir"><label>Kenar rengi</label><div class="renkler" data-renk="kenar_rengi" data-liste="KENAR_RENKLERI"></div></div>
+            <div class="kay"><label>Gölge</label><input type="range" data-g="golge" min="0" max="3" step="0.25" data-ondalik="2"><output></output></div>
+          </div>
+        </details>
+
+        <details class="grup">
+          <summary>Konum ve hizalama</summary>
+          <div>
+            <div class="satir"><label>Yer</label><div class="secim" id="g-konum"></div></div>
+            <div class="satir"><label>Hizalama</label><div class="secim" data-g="hizalama"><button data-v="sol">Sola</button><button data-v="orta">Ortaya</button><button data-v="sag">Sağa</button></div></div>
+            <div class="kay"><label>En çok genişlik</label><input type="range" data-g="genislik" min="0.3" max="0.96" step="0.01" data-carp="100" data-birim="%"><output></output></div>
+            <div class="ayar"><div>İngilizce altyazının üstünü kapat<div class="aciklama">Türkçe, İngilizcenin yerine yazılır. Kapalıysa Türkçe, İngilizcenin hemen üstünde durur.</div></div><label class="anahtar"><input type="checkbox" data-g="orijinali_kapat"><i></i></label></div>
+            <div class="satir"><label>Kapatma rengi</label><div class="renkler" data-renk="kapak_rengi" data-liste="KAPAK_RENKLERI"></div></div>
+            <div class="kay"><label>Kapatma saydamlığı</label><input type="range" data-g="kapak_saydamlik" min="0" max="1" step="0.01" data-carp="100" data-birim="%"><output></output></div>
+          </div>
+        </details>
+
+        <details class="grup">
+          <summary>İngilizce satır ve konuşmacı adı</summary>
+          <div>
+            <div class="ayar"><div>İngilizcesini de göster<div class="aciklama">Türkçenin yanında okunan İngilizce satır da yazılır.</div></div><label class="anahtar"><input type="checkbox" data-g="ingilizce_goster"><i></i></label></div>
+            <div class="ayar"><div>İngilizce üstte dursun</div><label class="anahtar"><input type="checkbox" data-g="ingilizce_ustte"><i></i></label></div>
+            <div class="satir"><label>İngilizce rengi</label><div class="renkler" data-renk="ingilizce_rengi" data-liste="ING_RENKLERI"></div></div>
+            <div class="kay"><label>İngilizce boyutu</label><input type="range" data-g="ingilizce_oran" min="0.4" max="1" step="0.05" data-carp="100" data-birim="%"><output></output></div>
+            <div class="satir"><label>Konuşmacı adı</label><div class="renkler" data-renk="etiket_rengi" data-liste="ETIKET_RENKLERI" data-bos="Yazıyla aynı"></div></div>
+            <p class="aciklama" style="margin:0;">Oyun satırın başına konuşanın adını yazıyorsa ("JASON: …") ad bu renkte görünür.</p>
+          </div>
+        </details>
+
+        <details class="grup">
+          <summary>Belirme</summary>
+          <div>
+            <div class="satir"><label>Yazı gelirken</label><div class="secim" data-g="gecis"><button data-v="yok">Anında</button><button data-v="yumusak">Yumuşak</button></div></div>
+            <p class="aciklama" style="margin:0;">"Anında" en hızlısıdır: yazı İngilizcesiyle aynı anda görünür.</p>
+          </div>
+        </details>
+        <button class="dugme" id="g-sifirla">Görünümü sıfırla</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= ÇEVİRİ ================= -->
+  <section class="sayfa" id="s-ceviri">
+    <h1>Çeviri</h1>
+    <p class="alt-baslik">Altyazıyı birebir Türkçeye çevirir; yerelleştirme yapmaz. <b>Hazır çeviri</b> en hızlısıdır (yaklaşık 0,1 saniye, internetsiz). Yapay zekâ servisleri daha doğal cümle kurar ama internet üzerinden çalıştığı için altyazı 0,3–1 saniye daha geç gelir.</p>
+    <div id="motorlar"></div>
+    <div class="kart">
+      <h2>Yedek</h2>
+      <div class="ayar"><div>Seçtiğim servis çalışmazsa Hazır çeviriyle devam et<div class="aciklama">İnternet kesilirse ya da ücretsiz kota dolarsa altyazı durmaz.</div></div><label class="anahtar"><input type="checkbox" id="c-yedek"><i></i></label></div>
+    </div>
+    <div class="kart">
+      <h2>Bir cümle dene</h2>
+      <div class="sira"><input type="text" id="c-metin" style="flex:1;" value="Get in the car. The cops are right behind us!"><button class="dugme" id="c-dene">Çevir</button></div>
+      <div class="sonuc-kutu sec-yazi" id="c-sonuc"></div>
+    </div>
+  </section>
+
+  <!-- ================= SESLENDİRME ================= -->
+  <section class="sayfa" id="s-ses">
+    <h1>Seslendirme</h1>
+    <p class="alt-baslik">İsterseniz Türkçe çeviri sesli de okunur. Sesler bu bilgisayarda üretilir; internet ve ücret gerekmez. Bütün sesler yapaydır.</p>
+    <div class="uyari sari acik magaza-yalniz" id="d-gelisiyor"><b>Seslendirme geliştirme aşamasında.</b> Türkçe sesli okuma (dublaj) üzerinde çalışmaya devam ediyoruz. Şimdiden deneyebilirsiniz; ancak ses bazen altyazının gerisinde kalabilir ve bazı sesler yapay duyulabilir. Altyazı bundan etkilenmez. Yenilikler güncellemelerle kendiliğinden gelir.</div>
+    <div class="kart">
+      <div class="ayar"><div><b>Türkçe seslendirme</b><div class="aciklama">Çevrilen her satır Türkçe okunur.</div></div><span class="rozet sari magaza-yalniz">Geliştiriliyor</span><label class="anahtar"><input type="checkbox" id="d-acik"><i></i></label></div>
+      <div class="ayar"><div>Doğal sesler<div class="aciklama" id="d-dogal-not">Uygulamayla gelen yapay zekâ sesleri. Kapalıysa Windows'un kendi sesi kullanılır.</div></div><span class="rozet" id="d-dogal-rozet">–</span><label class="anahtar"><input type="checkbox" id="d-dogal"><i></i></label></div>
+      <div class="ayar" id="d-motor-satir" style="display:none;"><div>Ses modeli<div class="aciklama">Hafif: işlemcide çalışır, oyunu etkilemez (önerilen). Güçlü: Doğal Ses Paketi; oyunla <b>aynı ekran kartını</b> kullandığı için oyun sırasında gecikebilir. Yetişemezse program kendiliğinden hafif modele geçer.</div></div>
+        <select id="d-motor"><option value="otomatik">Kendiliğinden (hafif)</option><option value="hafif">Hafif</option><option value="guclu">Güçlü</option></select></div>
+      <div class="uyari sari" id="d-gecis-not"></div>
+      <div class="ayar"><div>Her karaktere ayrı ses<div class="aciklama">Oyunun sesinden konuşan kişi ayırt edilir; kadın/erkek ve kişiye göre ses seçilir. Konuşanı tanımak için satırın ilk 1 saniyesi dinlenir; ses o kadar geç başlar. Kapalıyken ses hemen başlar (tek ses).</div></div><span class="rozet sari magaza-yalniz">Geliştiriliyor</span><label class="anahtar"><input type="checkbox" id="d-karakter"><i></i></label></div>
+      <div class="ayar"><div>Okurken oyunun sesini kıs</div><label class="anahtar"><input type="checkbox" id="d-kis"><i></i></label></div>
+      <div class="kay"><label>Ses seviyesi</label><input type="range" id="d-seviye" min="0.1" max="1" step="0.05"><output></output></div>
+      <div class="kay"><label>Okuma hızı</label><input type="range" id="d-hiz" min="0.8" max="2" step="0.05"><output></output></div>
+    </div>
+    <div class="kart">
+      <div class="sira" style="margin-bottom:10px;"><h2 style="margin:0;">Sesleri dinle</h2><span class="bosluk"></span><span class="aciklama" id="d-ses-durum"></span></div>
+      <div id="sesler"><div class="bos-not">Sesler aranıyor…</div></div>
+    </div>
+    <div class="kart magaza-yalniz" id="d-yakinda">
+      <div class="sira" style="margin-bottom:4px;"><h2 style="margin:0;">Daha doğal sesler</h2><span class="rozet sari">Yakında</span></div>
+      <p class="aciklama" style="margin:0;">Daha doğal ve duygulu Türkçe sesler, konuşana daha iyi uyan seslendirme ve daha az gecikme üzerinde çalışıyoruz. Hazır olduğunda güncellemeyle gelecek.</p>
+    </div>
+    <div class="kart magaza-gizli" id="sd-kart">
+      <div class="sira" style="margin-bottom:4px;"><h2 style="margin:0;">Ses motorlarını karşılaştır</h2><span class="rozet sari">Deneme</span><span class="bosluk"></span><span class="aciklama" id="sd-durum"></span></div>
+      <p class="aciklama" style="margin:0 0 12px;">Aynı cümleyi aynı karakter sesiyle farklı yapay zekâ modellerine okutup dinleyin. Hepsi bu bilgisayarda, ekran kartında çalışır; internet ve ücret gerekmez. İlk dinlemede model yüklenir (birkaç saniye); aynı anda tek model bellekte durur. <b>Oyun ya da altyazı çalışırken denemeyin:</b> bu modeller ekran kartını yoğun kullanır, oyunla aynı anda çalışınca ekran kartı sürücüsü kilitlenebilir.</p>
+      <div class="uyari sari" id="sd-yok">Bu denemeler için <b>Doğal Ses Paketi</b> (ekran kartıyla çalışan ses motoru) kurulu olmalı.</div>
+      <div id="sd-govde">
+        <div class="sira" style="margin-bottom:12px;">
+          <input type="text" id="sd-metin" style="flex:1; min-width:260px;" maxlength="400">
+          <select id="sd-ses"></select>
+        </div>
+        <div id="sd-modeller"></div>
+        <div class="kay" style="margin-top:6px;"><label>Chatterbox duygusu</label><input type="range" id="sd-abarti" min="0" max="1.5" step="0.05" value="0.5"><output>0.50</output></div>
+      </div>
+    </div>
+    <div class="kart">
+      <div class="sira" style="margin-bottom:10px;"><div style="flex:1;"><h2 style="margin:0 0 2px;">Tanınan konuşanlar</h2><div class="aciklama">Oyun sürerken tanınan kişiler ve verilen sesler.</div></div><button class="dugme kucuk" id="d-sifirla">Sıfırla</button></div>
+      <div id="kisiler"><div class="bos-not">Henüz kimse tanınmadı.</div></div>
+    </div>
+  </section>
+
+  <!-- ================= AYARLAR ================= -->
+  <section class="sayfa" id="s-ayarlar">
+    <h1>Ayarlar</h1>
+    <p class="alt-baslik">Programın genel davranışı.</p>
+    <div class="kart">
+      <div class="ayar"><div><b>Küçültünce simge durumuna in</b><div class="aciklama">Pencereyi küçülttüğünüzde (–) program saatin yanındaki simgeye iner ve çalışmaya devam eder; açmak için simgeye tıklayın, hızlı ayarlar için sağ tıklayın. Pencereyi <b>kapatınca (✕) program tamamen kapanır</b>, çeviri de durur.</div></div><label class="anahtar"><input type="checkbox" id="a-tepsi"><i></i></label></div>
+      <div class="ayar magaza-gizli"><div><b>Windows açılınca başlat</b><div class="aciklama" id="a-baslat-not">Bilgisayar açıldığında program simge durumunda başlar ve altyazıyı kendiliğinden çalıştırır.</div></div><label class="anahtar"><input type="checkbox" id="a-baslat"><i></i></label></div>
+      <div class="ayar magaza-yalniz"><div><b>Windows açılınca başlat</b><div class="aciklama">Bu ayar Windows'un kendi sayfasından açılır: Ayarlar → Uygulamalar → Başlangıç → Canlı Türkçe Altyazı. Açıkken program bilgisayar açıldığında simge durumunda başlar ve altyazıyı kendiliğinden çalıştırır.</div></div><button class="dugme" id="a-baslangic-ac">Windows ayarını aç</button></div>
+    </div>
+    <div class="kart">
+      <div class="ayar"><div><b>Bir şey çalışmıyor mu?</b><div class="aciklama">Sorun raporu, programın günlüğünü ve ayarlarını tek dosyada toplayıp masaüstüne koyar. Çeviri anahtarlarınız dosyaya <b>yazılmaz</b>; ses ve görüntü içermez.</div></div><button class="dugme" id="a-rapor">Sorun raporu oluştur</button></div>
+      <div class="sonuc-kutu sec-yazi" id="a-rapor-durum"></div>
+    </div>
+    <div class="kart">
+      <div class="bilgi-satir"><span>Sürüm</span><span id="a-surum"></span></div>
+      <div class="bilgi-satir"><span>Ayarların saklandığı yer</span><span id="a-klasor" class="sec-yazi"></span></div>
+      <div class="bilgi-satir"><span>Geliştiren</span><span>Appic · appic.studio@outlook.com</span></div>
+    </div>
+    <div class="kart">
+      <h2>Açık kaynak</h2>
+      <p class="aciklama" style="margin:0 0 8px;">Bu program özgür yazılımdır; GNU Affero Genel Kamu Lisansı sürüm 3 (AGPL-3.0) ile dağıtılır. Altyazı kararlılığı ve Türkçe son düzeltme yöntemlerinde CouchSubs (AGPL-3.0) ile GameTranslator projelerinden yararlanılmıştır.</p>
+      <p class="aciklama" style="margin:0;">Hazır çeviri: OPUS-MT (Tiedemann ve ark., Helsinki Üniversitesi), CC BY 4.0 · CTranslate2 (MIT) · Yazı okuma: RapidOCR / PaddleOCR modelleri (Apache 2.0), ONNX Runtime (MIT) · Konuşmacı tanıma: NVIDIA TitaNet-small (CC BY 4.0), sherpa-onnx (Apache 2.0); kadın/erkek ayrımı LibriSpeech (CC BY 4.0) ile eğitildi ve voice-gender-classifier (Jaesung Huh, MIT) · Doğal sesler: Pocket TTS Turkish (Wite Tech; model CC BY 4.0, kod Apache 2.0), Kyutai Pocket TTS (MIT) üzerine kurulu; PyTorch (BSD) · Doğal Ses Paketi kuruluysa: audio.cpp (ShugoAI, Apache 2.0) ve VoxCPM2 (OpenBMB, Apache 2.0) · Bütün karakter sesleri yapaydır: yapay zekâ ile tariften tasarlandı, gerçek bir kişinin sesi değildir.</p>
+    </div>
+    <div class="kart">
+      <h2>Gizlilik</h2>
+      <p class="aciklama" style="margin:0;">Program oyun görüntüsünü yalnızca bu bilgisayarda işler; görüntü hiçbir yere gönderilmez. <b>Hazır çeviri</b> seçiliyken hiçbir şey internete gönderilmez. Gemini, Groq, DeepL veya Claude'u seçerseniz ekrandan okunan İngilizce altyazı metni yalnızca o servise, kendi anahtarınızla gönderilir. Hesap, reklam veya kullanım takibi yoktur.</p>
+    </div>
+  </section>
+</main>
+
+<div id="bildirim"></div>
+<script src="/altyazi_stil.js"></script>
+<script src="/arayuz.js"></script>
+</body>
+</html>

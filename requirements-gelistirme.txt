@@ -1,0 +1,5 @@
+-r requirements.txt
+pyinstaller
+pillow
+playwright
+soundfile  # yalnızca paket/cinsiyet_egit.py

@@ -1,0 +1,9 @@
+{
+ "gorunen_ad": "Leyla",
+ "cinsiyet": "kadin",
+ "tanitim": "Kırklarında, sakin ve otoriter kadın; tok ve güven veren ses.",
+ "referans": "referans.wav",
+ "tohum": 10393,
+ "sira": 4,
+ "kaynak": "Canlı Türkçe Altyazı için metin tarifinden tasarlanmış yapay sesin (paket/dogal_ses/ses_tasarla.py) Pocket TTS ile kopyası; gerçek bir kişinin sesi değil"
+}

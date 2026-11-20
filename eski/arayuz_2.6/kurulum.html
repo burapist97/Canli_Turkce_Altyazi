@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canlı Türkçe Altyazı — Kurulum</title>
+<link rel="stylesheet" href="/ortak.css">
+<style>
+  body { display: grid; grid-template-columns: 252px 1fr; height: 100vh; overflow: hidden; }
+  aside { background: var(--kenar-zemin); backdrop-filter: blur(30px) saturate(1.6); border-right: .5px solid var(--cizgi2);
+    padding: 18px 12px; display: flex; flex-direction: column; gap: 20px; }
+  aside .logo { padding: 2px 6px; }
+  .adim-listesi { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 1px; }
+  .adim-listesi li { display: flex; align-items: center; gap: 11px; padding: 7px 9px; border-radius: 8px; color: var(--soluk); font-weight: 500; font-size: 13.5px; }
+  .adim-listesi .no { width: 22px; height: 22px; border-radius: 50%; box-shadow: inset 0 0 0 1.5px var(--cizgi2); display: grid; place-items: center; font-size: 11.5px; font-weight: 600; flex: none; transition: all .2s; }
+  .adim-listesi li.simdi { background: var(--dolgu); color: var(--yazi); }
+  .adim-listesi li.simdi .no { box-shadow: none; background: var(--lava); color: #fff; }
+  .adim-listesi li.tamam { color: var(--yazi2); }
+  .adim-listesi li.tamam .no { background: var(--yesil); box-shadow: none; color: #fff; }
+  .alt-not { margin-top: auto; font-size: 12px; color: var(--soluk); padding: 0 6px; }
+  .alt-not a { cursor: pointer; }
+
+  .govde { display: flex; flex-direction: column; min-height: 0; }
+  main { flex: 1; overflow-y: auto; padding: 34px 44px 30px; }
+  .ic { max-width: 860px; margin: 0 auto; }
+  .adim { display: none; animation: gir .24s cubic-bezier(.2, .8, .2, 1); }
+  .adim.aktif { display: block; }
+  @keyframes gir { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+  .ust-yazi { font-size: 12px; font-weight: 600; color: var(--lava); letter-spacing: .02em; text-transform: uppercase; }
+  h2 { font-size: 30px; margin: 4px 0 8px; }
+  .giris { color: var(--yazi2); font-size: 16px; margin: 0 0 22px; max-width: 680px; }
+  .alt-cubuk { border-top: .5px solid var(--cizgi2); background: var(--kenar-zemin); backdrop-filter: blur(30px); padding: 12px 44px; }
+  .alt-cubuk .ic { display: flex; align-items: center; gap: 10px; }
+  #engel { color: var(--soluk); font-size: 13px; margin-left: auto; }
+  #ileri.parla { animation: parla 1.6s ease-in-out infinite; }
+  @keyframes parla { 0%,100% { box-shadow: 0 0 0 0 rgba(var(--vurgu-rgb), .5); } 50% { box-shadow: 0 0 0 8px rgba(var(--vurgu-rgb), 0); } }
+
+  /* büyük seçim kartları */
+  .secimler { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .secimler.iki { grid-template-columns: repeat(2, 1fr); }
+  .buyuk-secim { background: var(--yuzey); box-shadow: inset 0 0 0 1px var(--cizgi); border-radius: var(--r); padding: 18px; cursor: pointer; transition: box-shadow .15s, transform .12s; position: relative; }
+  .buyuk-secim:hover { box-shadow: inset 0 0 0 1px var(--cizgi2), var(--golge); transform: translateY(-1px); }
+  .buyuk-secim.secili { box-shadow: inset 0 0 0 2px var(--lava); background: linear-gradient(180deg, var(--lava-zemin), transparent 75%), var(--yuzey); }
+  .buyuk-secim.kapali { opacity: .45; cursor: not-allowed; transform: none; }
+  .buyuk-secim h3 { margin: 12px 0 3px; font-size: 16px; }
+  .buyuk-secim p { margin: 0; color: var(--soluk); font-size: 13px; }
+  .buyuk-secim .rozet { position: absolute; top: 12px; right: 12px; }
+  .akis-cizim { display: flex; align-items: center; gap: 6px; font-size: 26px; height: 40px; }
+  .akis-cizim i { font-style: normal; color: var(--soluk); font-size: 17px; }
+  .akis-cizim .sim { width: 30px; height: 30px; color: var(--lava); }
+  .akis-cizim .sim svg { stroke-width: 1.6; }
+  .adim-listesi .no .sim { width: 13px; height: 13px; }
+  .adim-listesi .no .sim svg { stroke-width: 2.6; }
+  .kontrol .simge .sim { width: 15px; height: 15px; }
+  .kontrol .simge .sim svg { stroke-width: 2.6; }
+
+  /* kontrol listesi */
+  .kontrol { display: flex; align-items: center; gap: 13px; padding: 12px 15px; border-radius: 10px; background: var(--yuzey); margin-bottom: 8px; }
+  .kontrol .simge { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; flex: none; background: var(--dolgu); color: var(--soluk); font-weight: 700; }
+  .kontrol.ok .simge { background: var(--yesil); color: #fff; }
+  .kontrol.bekle .simge { background: var(--sari-zemin); color: var(--sari); }
+  .kontrol.bekle .simge::after { content: ""; width: 12px; height: 12px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; animation: don .8s linear infinite; }
+  .kontrol .yazi { flex: 1; }
+  .kontrol .yazi b { display: block; font-weight: 600; }
+  .kontrol .yazi span { color: var(--soluk); font-size: 13px; }
+  .yardim-kart { box-shadow: inset 3px 0 0 var(--sari); }
+
+  /* OBS çizimi */
+  .mini { background: #1e1f24; border-radius: var(--r); padding: 14px; font-size: 13px; color: #c9c9d6; }
+  .mini .men { display: flex; gap: 14px; padding-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,.08); margin-bottom: 8px; color: #8e8e93; }
+  .mini .men .sec { color: #fff; background: #3c5ccf; padding: 0 8px; border-radius: 4px; }
+  .mini .oge { padding: 5px 8px; border-radius: 5px; }
+  .mini .isaret { outline: 2px solid var(--lava); outline-offset: 1px; }
+
+  /* kaynak kartları */
+  .kaynaklar { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .kaynak { background: var(--yuzey); box-shadow: inset 0 0 0 1px var(--cizgi); border-radius: var(--r); overflow: hidden; cursor: pointer; transition: box-shadow .15s, transform .12s; position: relative; }
+  .kaynak:hover { transform: translateY(-1px); box-shadow: inset 0 0 0 1px var(--cizgi2), var(--golge); }
+  .kaynak img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; background: #000; }
+  .kaynak div { padding: 10px 12px; font-weight: 600; font-size: 13.5px; display: flex; justify-content: space-between; gap: 8px; }
+  .kaynak.secili { box-shadow: inset 0 0 0 2px var(--lava); }
+  .kaynak.secili div::after { content: "Seçildi"; color: var(--lava); font-size: 12.5px; }
+  .kaynak .rozet { position: absolute; top: 8px; left: 8px; }
+
+  /* bölge */
+  .tuval { position: relative; user-select: none; border-radius: var(--r); overflow: hidden; cursor: crosshair; background: #000; min-height: 120px; }
+  .tuval img { width: 100%; display: block; pointer-events: none; }
+  .tuval .bos { position: absolute; inset: 0; display: grid; place-items: center; color: #8e8e93; }
+  .secim { position: absolute; border: 2px solid var(--lava); background: rgba(var(--vurgu-rgb), .14); border-radius: 5px; display: none; box-shadow: 0 0 0 9999px rgba(0,0,0,.35); }
+  .secim span { position: absolute; top: -24px; left: -2px; background: var(--lava); color: #fff; font-weight: 600; font-size: 12px; padding: 1px 8px; border-radius: 5px; white-space: nowrap; }
+  .okunan { font-size: 16px; font-weight: 500; padding: 11px 14px; background: var(--dolgu); color: var(--ok-yazi); border-radius: 10px; font-family: "SF Mono", ui-monospace, Consolas, monospace; }
+  details summary { cursor: pointer; color: var(--lava); font-size: 14px; margin-top: 12px; }
+  details.olmuyor { margin-top: 18px; background: var(--yuzey); border-radius: 10px; padding: 4px 16px; }
+  details.olmuyor summary { color: var(--lava); font-weight: 500; margin: 8px 0; }
+  details.olmuyor ul { margin: 4px 0 12px; padding-left: 20px; color: var(--yazi2); }
+  details.olmuyor li { margin-bottom: 6px; }
+  .kucuk-resim img { max-width: 100%; border-radius: 8px; display: block; margin-top: 6px; }
+
+  /* monitörler */
+  .masa { position: relative; height: 220px; background: var(--yuzey); border-radius: var(--r); }
+  .monitor { position: absolute; border: 3px solid var(--cizgi2); border-radius: 8px; background: #0b0b10; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; text-align: center; transition: border-color .15s, background .15s; padding: 6px; color: #fff; }
+  .monitor:hover { border-color: var(--lava2); }
+  .monitor.secili { border-color: var(--lava); background: linear-gradient(160deg, rgba(var(--vurgu-rgb), .35), #0b0b10); }
+  .monitor b { font-size: 26px; line-height: 1; }
+  .monitor span { font-size: 12px; color: #a1a1a6; }
+  .monitor::after { content: ""; position: absolute; bottom: -12px; left: 40%; width: 20%; height: 9px; background: var(--cizgi2); border-radius: 0 0 4px 4px; }
+
+  /* senaryoya göre göster/gizle: body.pc = bilgisayar oyunu */
+  body.pc .sadece-obs, body:not(.pc) .sadece-pc { display: none !important; }
+  .adim-listesi li.atla { display: none; }
+
+  .ses-kutusu { display: flex; gap: 10px; align-items: center; }
+  .buyuk-tik { width: 72px; height: 72px; border-radius: 50%; background: var(--yesil); color: #fff; display: grid; place-items: center; margin: 0 auto 16px; box-shadow: 0 10px 30px rgba(48, 209, 88, .3); }
+  .ortala { text-align: center; }
+  .ozet-liste { max-width: 460px; margin: 0 auto 26px; text-align: left; background: var(--yuzey); border-radius: var(--r); padding: 4px 16px; }
+  .ozet-liste div { display: flex; gap: 10px; padding: 10px 0; border-bottom: .5px solid var(--cizgi); color: var(--yazi2); }
+  .ozet-liste div:last-child { border-bottom: 0; }
+  .ozet-liste div b { color: var(--yazi); margin-left: auto; text-align: right; font-weight: 500; }
+</style>
+</head>
+<body>
+<aside>
+  <div class="logo"><div class="logo-isaret"></div><div class="logo-ad">Canlı Türkçe Altyazı<small>KURULUM</small></div></div>
+  <ul class="adim-listesi" id="adim-listesi"></ul>
+  <div class="alt-not" id="alt-not">Ne yapacağınızı her adımda söyleyeceğim. Takılırsanız alttaki <b>"Olmuyor mu?"</b> kısmına bakın.</div>
+</aside>
+
+<div class="govde">
+<main><div class="ic">
+
+  <!-- 0: Başlangıç -->
+  <section class="adim" data-ad="Başlangıç">
+    <div class="ust-yazi">Hoş geldiniz</div>
+    <h2>Oyunu nasıl oynuyorsunuz?</h2>
+    <p class="giris">Oyundaki İngilizce yazıları Türkçeye çevirip ekrana yazacağım; isterseniz Türkçe sesli de okurum. Önce size uyan kutuya tıklayın.</p>
+    <div class="secimler">
+      <div class="buyuk-secim" data-senaryo="konsol_obs">
+        <span class="rozet yesil">En çok kullanılan</span>
+        <div class="akis-cizim"><span class="sim" data-sim="kol"></span><i>›</i><span class="sim" data-sim="kart"></span><i>›</i><span class="sim" data-sim="bilgisayar"></span></div>
+        <h3>Konsol + capture card + OBS</h3>
+        <p>PS5 / Xbox capture card ile bilgisayara bağlı, görüntü OBS'te.</p>
+      </div>
+      <div class="buyuk-secim" data-senaryo="konsol_obssuz">
+        <div class="akis-cizim"><span class="sim" data-sim="kol"></span><i>›</i><span class="sim" data-sim="kart"></span><i>›</i><span class="sim" data-sim="bilgisayar"></span></div>
+        <h3>Konsol + capture card, OBS yok</h3>
+        <p>OBS'i birlikte ücretsiz kuracağız, 3 dakika sürer.</p>
+      </div>
+      <div class="buyuk-secim" data-senaryo="pc">
+        <div class="akis-cizim"><span class="sim" data-sim="ekran"></span></div>
+        <h3>Bilgisayar oyunu</h3>
+        <p>Oyun bu bilgisayarda çalışıyor (Steam, Epic…). OBS gerekmez.</p>
+      </div>
+    </div>
+    <div class="kart" style="margin-top:20px;">
+      <p class="kart-baslik">Oyunda şunu açın</p>
+      <ol class="adimlar" style="margin-top:10px;">
+        <li><span>Oyunun ayarlarından <b>Altyazılar: Açık</b>, dil: <b>İngilizce</b>.</span></li>
+        <li><span>Varsa <b>altyazı boyutu: Büyük</b> ve <b>altyazı arka planı: Açık</b>. Okumam kolaylaşır.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- 1: OBS -->
+  <section class="adim" data-ad="OBS">
+    <div class="ust-yazi">Adım 1</div>
+    <h2>OBS'i bulalım</h2>
+    <p class="giris">Oyun görüntüsünü OBS'ten alacağım. Aşağıdaki maddeler kendiliğinden yeşile döner; siz sadece söylediğim şeyi yapın.</p>
+    <div class="kontrol" id="k-kurulu"><div class="simge"></div><div class="yazi"><b>OBS kurulu</b><span></span></div><div data-dugme></div></div>
+    <div class="kontrol" id="k-acik"><div class="simge"></div><div class="yazi"><b>OBS açık</b><span></span></div></div>
+    <div class="kontrol" id="k-ws"><div class="simge"></div><div class="yazi"><b>OBS bağlantı izni açık</b><span></span></div></div>
+    <div class="kontrol" id="k-bag"><div class="simge"></div><div class="yazi"><b>Bağlandı</b><span></span></div></div>
+
+    <div class="kart yardim-kart" id="obs-indir-kart" style="display:none; margin-top:16px;">
+      <p class="kart-baslik">OBS'i kuralım (ücretsiz)</p>
+      <ol class="adimlar" style="margin-top:10px;">
+        <li><span><b>OBS'i indir</b> düğmesine basın, açılan sayfada <b>Windows</b>'a tıklayın.</span></li>
+        <li><span>İnen dosyayı açın, hep <b>İleri (Next)</b>'ye basıp kurun.</span></li>
+        <li><span>OBS ilk açıldığında bir sihirbaz sorarsa <b>İptal</b> deyin.</span></li>
+      </ol>
+      <button class="dugme" onclick="disariAc('https://obsproject.com/')">OBS'i indir <span class="sim" data-sim="disari"></span></button>
+    </div>
+
+    <div class="izgara-2" id="ws-yardim" style="display:none; margin-top:16px;">
+      <div class="kart yardim-kart" style="margin:0;">
+        <p class="kart-baslik">OBS'te bir kereye mahsus şunu yapın</p>
+        <ol class="adimlar" style="margin-top:10px;">
+          <li><span>OBS'in üstündeki <b class="vurgu">Araçlar</b> menüsüne tıklayın</span></li>
+          <li><span><b class="vurgu">WebSocket Sunucu Ayarları</b>'nı seçin</span></li>
+          <li><span><b>WebSocket sunucusunu etkinleştir</b> kutusuna tik atın</span></li>
+          <li><span><b>Tamam</b>'a basın. Gerisini ben hallederim.</span></li>
+        </ol>
+      </div>
+      <div class="mini">
+        <div class="men"><span>Dosya</span><span>Düzen</span><span>Görünüm</span><span class="sec">Araçlar</span><span>Yardım</span></div>
+        <div class="oge">Otomatik Yapılandırma Sihirbazı</div>
+        <div class="oge isaret" style="background:#3c5ccf; color:#fff;">WebSocket Sunucu Ayarları</div>
+        <div style="margin-top:12px; padding-top:10px; border-top:1px solid var(--cizgi);">
+          <div class="oge isaret" style="display:inline-block;"><span class="sim" data-sim="onaykutu"></span> WebSocket sunucusunu etkinleştir</div>
+        </div>
+        <div style="font-size:11.5px; color:var(--soluk); margin-top:10px;">OBS İngilizceyse: Tools → WebSocket Server Settings → Enable WebSocket server</div>
+      </div>
+    </div>
+
+    <details class="olmuyor"><summary>Olmuyor mu?</summary>
+      <ul>
+        <li>OBS açık ama "açık" maddesi yeşile dönmüyorsa sorun değil; bağlantı izni açılınca bağlanırım.</li>
+        <li>OBS'te <b>Araçlar</b> menüsünde WebSocket yoksa OBS çok eski: <a onclick="disariAc('https://obsproject.com/')">güncel OBS'i indirin</a>.</li>
+        <li>OBS'te bağlantı şifresini kendiniz değiştirdiyseniz aşağıya yazın:</li>
+      </ul>
+      <div class="anahtar-satir" style="margin-bottom:12px;">
+        <input type="password" id="sifre" placeholder="OBS WebSocket şifresi (gerekmiyorsa boş bırakın)" autocomplete="off">
+        <input type="number" id="port" value="4455" style="max-width:100px;" title="Port">
+        <button class="dugme ikincil" id="baglan">Bağlan</button>
+      </div>
+      <div class="mesaj" id="baglan-durum"></div>
+    </details>
+  </section>
+
+  <!-- 2: Oyun görüntüsü -->
+  <section class="adim" data-ad="Oyun görüntüsü">
+    <div class="ust-yazi">Adım 2</div>
+    <div class="sadece-pc">
+      <h2>Oyun hangi ekranda?</h2>
+      <p class="giris"><b>1.</b> Oyunu açın. Oyunun görüntü ayarlarında <b>Görüntü modu: Kenarlıksız pencere</b> seçin
+        (İngilizce: <i>Borderless</i> ya da <i>Windowed Fullscreen</i>).<br><b>2.</b> Oyunun göründüğü ekrana tıklayın.</p>
+      <div class="kaynaklar" id="ekranlar"></div>
+      <div class="mesaj" id="ekran-durum"></div>
+      <div style="margin-top:14px;"><button class="dugme ikincil" id="ekran-yenile"><span class="sim" data-sim="yenile"></span> Ekranları yenile</button></div>
+      <div class="kart yardim-kart" style="margin-top:16px;">
+        <p class="kart-baslik">Neden "Kenarlıksız pencere"?</p>
+        <p class="kart-alt" style="margin:0;">Türkçe yazıyı oyunun üstüne koyuyorum. Oyun <b>"Tam ekran"</b> (Exclusive Fullscreen) modundayken Windows hiçbir yazının oyunun üstüne çıkmasına izin vermez. Kenarlıksız pencere de tam ekran görünür, fark etmezsiniz.</p>
+      </div>
+      <details class="olmuyor"><summary>Olmuyor mu?</summary>
+        <ul>
+          <li>Kutuda oyun yerine siyah ekran görünüyorsa oyun büyük ihtimalle <b>Tam ekran</b> modunda: <b>Kenarlıksız pencere</b> yapın, sonra <b>Ekranları yenile</b>.</li>
+          <li>Tek ekranınız varsa kutuda bu program görünebilir, sorun değil. O ekranı seçin; bir sonraki adımda oyunun görüntüsünü alacağım.</li>
+        </ul>
+      </details>
+    </div>
+    <div class="sadece-obs">
+    <h2>Oyun görüntüsü hangisi?</h2>
+    <p class="giris">OBS'teki görüntüler aşağıda. Oyunu gösteren kutuyu seçtim; yanlışsa <b>oyunun göründüğü</b> kutuya tıklayın.</p>
+    <div class="kaynaklar" id="kaynaklar"></div>
+    <div class="mesaj" id="kaynak-durum"></div>
+    <div class="kart yardim-kart" id="cc-ekle-kart" style="display:none; margin-top:16px;">
+      <p class="kart-baslik">Capture card'ı OBS'e ekleyelim</p>
+      <ol class="adimlar" style="margin-top:10px;">
+        <li><span>OBS'in altındaki <b>Kaynaklar</b> kutusunda <b class="vurgu">+</b> düğmesine basın.</span></li>
+        <li><span><b class="vurgu">Video Yakalama Aygıtı</b>'nı seçin, adını <b>Oyun</b> yazın, <b>Tamam</b>.</span></li>
+        <li><span><b>Aygıt</b> listesinden capture card'ınızı seçin (ör. Elgato, USB Video), <b>Tamam</b>.</span></li>
+        <li><span>OBS'te oyun görünüyorsa aşağıdaki <b>Listeyi yenile</b>'ye basın.</span></li>
+      </ol>
+    </div>
+    <div style="margin-top:14px;"><button class="dugme ikincil" id="kaynak-yenile"><span class="sim" data-sim="yenile"></span> Listeyi yenile</button></div>
+    <details class="olmuyor"><summary>Olmuyor mu?</summary>
+      <ul>
+        <li>Kutularda oyun siyah görünüyorsa konsol açık mı, capture card'ın kablosu takılı mı bakın.</li>
+        <li>Facecam'i (yüzünüzün göründüğü kutu) seçmeyin.</li>
+        <li>OBS'te oyun görünüyor ama burada yoksa <b>Listeyi yenile</b>'ye basın.</li>
+      </ul>
+    </details>
+    </div>
+  </section>
+
+  <!-- 3: Altyazı yeri -->
+  <section class="adim" data-ad="Altyazı yeri">
+    <div class="ust-yazi">Adım 3</div>
+    <h2>Altyazının yerini bulalım</h2>
+    <p class="giris sadece-obs"><b>1.</b> Oyunda biri konuşup <b>ekranda İngilizce altyazı çıkınca oyunu durdurun</b> (pause).<br><b>2.</b> Aşağıdaki büyük düğmeye basın.</p>
+    <p class="giris sadece-pc"><b>1.</b> <b>Oynarken bul</b>'a basın.<br><b>2.</b> Hemen oyuna geçin (<kbd>Alt</kbd>+<kbd>Tab</kbd>) ve biri konuşup <b>İngilizce altyazı çıkana kadar</b> oynayın. Altyazıyı ben yakalarım (2 dakikaya kadar beklerim), sonra buraya dönün.<br><span style="color:var(--soluk)">Oyun başka ekrandaysa: altyazı çıkınca oyunu durdurup <b>Altyazıyı otomatik bul</b>'a basmanız da yeter.</span></p>
+    <div class="satir" style="margin-bottom:14px;">
+      <button class="dugme sadece-pc" id="sonra-bul" style="font-size:16px; padding:12px 22px;"><span class="sim" data-sim="kol"></span> Oynarken bul</button>
+      <button class="dugme" id="otomatik-bul" style="font-size:16px; padding:12px 22px;"><span class="sim" data-sim="sihir"></span> Altyazıyı otomatik bul</button>
+      <button class="dugme ikincil" id="goruntu-yenile"><span class="sim" data-sim="yenile"></span> Görüntüyü yenile</button>
+    </div>
+    <div class="tuval" id="tuval"><div class="bos" id="tuval-bos">Görüntü yükleniyor…</div><img id="tuval-resim" alt=""><div class="secim" id="secim"><span>Altyazı burada</span></div></div>
+    <div class="mesaj" id="okuma-durum"></div>
+    <div id="okuma-sonuc" style="display:none; margin-top:12px;">
+      <div class="kart-alt" style="margin:0 0 6px;">Okuduğum yazı:</div>
+      <div class="okunan" id="okunan"></div>
+      <details><summary>Programın gördüğü (sorun ayıklama)</summary>
+        <div class="kucuk-resim"><img id="kesit-resim" alt=""><img id="maske-resim" alt=""></div>
+      </details>
+    </div>
+    <details class="olmuyor"><summary>Olmuyor mu? Elle ayarlayın</summary>
+      <ul>
+        <li>Fareyle görüntünün üstünde <b>altyazının etrafına bir kutu çizin</b> (biraz büyük, iki satır sığsın), sonra <b>Okumayı dene</b>.</li>
+        <li>Ya da hazır bir yer seçin:</li>
+      </ul>
+      <div class="satir" style="margin-bottom:12px;">
+        <button class="dugme ikincil kucuk" data-bolge="0.12,0.80,0.76,0.15">Alt orta</button>
+        <button class="dugme ikincil kucuk" data-bolge="0.05,0.72,0.90,0.24">Geniş alt bant</button>
+        <button class="dugme ikincil kucuk" data-bolge="0.15,0.62,0.70,0.20">Biraz yukarıda</button>
+        <button class="dugme kucuk" id="okuma-dene">Okumayı dene</button>
+      </div>
+    </details>
+  </section>
+
+  <!-- 4: Oyun ekranı -->
+  <section class="adim" data-ad="Oyun ekranı">
+    <div class="ust-yazi">Adım 4</div>
+    <h2>Oyunu hangi ekranda oynuyorsunuz?</h2>
+    <p class="giris">Türkçe yazıyı OBS'e ekledim. Şimdi oynadığınız monitöre tıklayın; oyunu orada <b>Türkçe altyazılı, tam ekran</b> açacağım.</p>
+    <div class="mesaj" id="katman-durum"></div>
+    <div class="masa" id="masa"></div>
+    <div class="mesaj" id="monitor-durum"></div>
+    <div class="kart" style="margin-top:16px;">
+      <p class="kart-baslik">Oyun ekranındaki görüntü nereden geliyor?</p>
+      <p class="kart-alt" style="margin:0;">Türkçe yazının görünmesi için oyun ekranının <b>OBS'ten</b> gelmesi gerekir. Monitör capture card'ın kendi <b>HDMI OUT</b> çıkışına takılıysa yazı orada görünmez: monitörün kablosunu bilgisayara takın ve yukarıdan o monitörü seçin. Zaten OBS'in tam ekranında oynuyorsanız bu adımı <b>atlayabilirsiniz</b>.</p>
+    </div>
+    <details class="olmuyor"><summary>Olmuyor mu?</summary>
+      <ul>
+        <li>Tam ekrandan çıkmak için oyun ekranında <kbd>Esc</kbd>'ye basın, ya da sağ tıklayıp <b>Kapat</b> deyin.</li>
+        <li>Yanlış monitörde açıldıysa kapatıp diğer monitöre tıklayın.</li>
+        <li>OBS'te sahneniz değiştiyse panelden <b>Türkçe katmanı tekrar ekle</b>'ye basabilirsiniz.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- 5: Çeviri -->
+  <section class="adim" data-ad="Çeviri">
+    <div class="ust-yazi">Adım 5</div>
+    <h2>Çeviriyi kim yapsın?</h2>
+    <p class="giris"><b>Hazır çeviri</b> seçili ve çalışıyor: ücretsiz, anahtarsız, internetsiz. Hiçbir şey yapmadan <b>Devam</b>'a basabilirsiniz. Argo ve esprilerde daha doğal çeviri isterseniz <b>Google Gemini</b>'yi seçip ücretsiz anahtar alabilirsiniz (1 dakika).</p>
+    <div id="ceviri-kutu"></div>
+    <details class="olmuyor"><summary>Olmuyor mu?</summary>
+      <ul>
+        <li>Anahtarı kopyalarken başında/sonunda boşluk kalmasın; tamamını seçip <kbd>Ctrl</kbd>+<kbd>C</kbd>.</li>
+        <li>"Anahtar geçersiz" diyorsa anahtar sayfasından yeni bir anahtar oluşturup yapıştırın.</li>
+        <li>"Kota doldu" ya da internet kesilirse dert etmeyin: çeviri kendiliğinden <b>Hazır çeviri</b>'ye geçer, oyun Türkçe kalmaya devam eder.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- 6: Türkçe ses -->
+  <section class="adim" data-ad="Türkçe ses">
+    <div class="ust-yazi">Adım 6</div>
+    <h2>Türkçe sesli de okuyayım mı?</h2>
+    <p class="giris">İsterseniz altyazıyı Türkçe bir sesle de okurum (TV'lerdeki <b>lektör</b> gibi, dudak hareketine uymaz). İstemiyorsanız <b>Sadece Türkçe altyazı</b> seçili kalsın: oyunun sesine hiç dokunmam.</p>
+    <div class="secimler">
+      <div class="buyuk-secim" data-dublaj="0"><div class="akis-cizim"><span class="sim" data-sim="altyazi"></span></div><h3>Sadece Türkçe altyazı</h3><p>Ekranda Türkçe yazı. Oyunun sesine hiç dokunmam.</p></div>
+      <div class="buyuk-secim" data-dublaj="1"><div class="akis-cizim"><span class="sim" data-sim="altyazi"></span><i>+</i><span class="sim" data-sim="ses"></span></div><h3>Altyazı + Türkçe ses</h3><p>Yazıyı Türkçe sesli de okurum.</p></div>
+      <div class="buyuk-secim" data-dublaj="2"><div class="akis-cizim"><span class="sim" data-sim="ses"></span></div><h3>Sadece Türkçe ses</h3><p>Yazı göstermem; konuşmaları Türkçe sesle okurum. Oyunun kendi altyazısı açık kalır.</p></div>
+    </div>
+    <div id="dublaj-ayar" style="display:none; margin-top:16px;">
+      <div class="kart yardim-kart" id="ses-yok" style="display:none;">
+        <p class="kart-baslik">Bilgisayarda Türkçe ses yok, ekleyelim</p>
+        <ol class="adimlar" style="margin-top:10px;">
+          <li><span><b>Ses ayarlarını aç</b>'a basın.</span></li>
+          <li><span><b>Ses ekle</b>'ye basın, listeden <b>Türkçe</b>'yi seçip <b>Ekle</b>.</span></li>
+          <li><span>İnince buraya dönüp <b>Tekrar kontrol et</b>'e basın.</span></li>
+        </ol>
+        <div class="satir"><button class="dugme" id="ses-ayarlari">Ses ayarlarını aç <span class="sim" data-sim="disari"></span></button><button class="dugme ikincil" id="ses-kontrol">Tekrar kontrol et</button></div>
+      </div>
+      <div class="kart" id="ses-var" style="display:none;">
+        <p class="kart-alt" id="dogal-not" style="display:none; margin:0 0 14px;">Konuşmaları <b>doğal yapay zekâ sesleri</b> okur: kadın ve erkek, <span id="dogal-sayi"></span> ayrı ses. Programla birlikte gelir; internet ve ekran kartı gerekmez. <span id="dogal-yedek">Aşağıdaki Windows sesi yalnızca onlar hazırlanırken ya da bir aksaklıkta devreye girer.</span></p>
+        <div class="izgara-2">
+          <div>
+            <div id="ses-sec-kutu">
+              <label class="etiket" id="ses-etiket">Ses</label>
+              <select id="ses-sec"></select>
+            </div>
+            <label class="etiket" id="hiz-etiket" style="margin-top:14px;">Okuma hızı <span id="hiz-deger" class="rozet gri"></span></label>
+            <input type="range" id="hiz" min="0.9" max="1.8" step="0.05">
+          </div>
+          <div>
+            <label class="anahtar-kutu" style="padding-top:0;"><div><b>Okurken oyunun sesini kıs</b><div class="aciklama">Türkçe okurken oyunun sesini kısarım, bitince eski haline getiririm. Kapatırsanız oyunun sesine hiç dokunmam.</div></div>
+              <span class="dugmecik"><input type="checkbox" id="kis"><span></span></span></label>
+            <label class="anahtar-kutu" id="karakter-kutu"><div><b>Karakter sesleri</b><div class="aciklama">Kadına kadın sesi, farklı erkeklere farklı ses. Konuşanı oyunun sesinden tanırım; ses kaydedilmez.</div></div>
+              <span class="dugmecik"><input type="checkbox" id="karakter"><span></span></span></label>
+            <button class="dugme" id="dinle" style="margin-top:8px;"><span class="sim" data-sim="ses"></span> Dinle</button>
+          </div>
+        </div>
+        <div class="mesaj" id="dublaj-durum"></div>
+      </div>
+    </div>
+    <details class="olmuyor"><summary>Olmuyor mu?</summary>
+      <ul>
+        <li><b>Dinle</b>'ye basınca ses gelmiyorsa bilgisayarın sesi açık mı, kulaklık takılı mı bakın.</li>
+        <li>Türkçe ses, bu bilgisayarın hoparlöründen / kulaklığından çıkar.</li>
+        <li>Sonradan açıp kapatmak için kontrol panelinde <b>Türkçe ses</b> bölümü var.</li>
+      </ul>
+    </details>
+  </section>
+
+  <!-- 7: Hazır -->
+  <section class="adim" data-ad="Hazır">
+    <div class="ortala" style="padding-top:10px;">
+      <div class="buyuk-tik"><svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2>Her şey hazır!</h2>
+      <p class="giris sadece-obs" style="margin:0 auto 20px;">Bir dahaki sefere sadece <b>OBS'i açın</b>, sonra bu programı açıp <b>Başlat</b>'a basın.</p>
+      <p class="giris sadece-pc" style="margin:0 auto 20px;">Bir dahaki sefere bu programı açıp <b>Başlat</b>'a basın, sonra oyuna geçin. Türkçe yazı oyunun üstünde çıkar; fare tıklamaları oyuna gider.</p>
+      <div class="ozet-liste" id="ozet"></div>
+      <button class="dugme" id="bitir" style="font-size:17px; padding:14px 32px;">▶ Başlat</button>
+      <div class="mesaj" id="bitir-durum" style="max-width:520px; margin:14px auto 0;"></div>
+    </div>
+  </section>
+
+</div></main>
+
+<div class="alt-cubuk"><div class="ic">
+  <button class="dugme hayalet" id="geri">← Geri</button>
+  <span id="engel"></span>
+  <button class="dugme" id="ileri">Başlayalım →</button>
+</div></div>
+</div>
+
+<script src="/ortak.js"></script>
+<script>
+const adimlar = [...document.querySelectorAll(".adim")];
+const SON = adimlar.length - 1;
+let simdi = 0, kurulumTamam = false, ceviri = null, obsZamanlayici = null;
+const d = { altyaziGoster: true, senaryo: "", baglandi: false, kaynak: "", ekran: null, bolge: null, okundu: "", katman: false, monitor: null, dublaj: null, sesVar: false, motorAdlari: {} };
+
+const liste = $("adim-listesi");
+adimlar.forEach((a, i) => { const li = document.createElement("li"); li.innerHTML = `<span class="no">${i === SON ? sim("onay") : i === 0 ? sim("baslangic") : i}</span><span></span>`; li.lastChild.textContent = a.dataset.ad; liste.appendChild(li); });
+
+const pc = () => d.senaryo === "pc";
+// Bilgisayar oyununda OBS (1) ve OBS projektörü (4) adımları yok
+const atlanir = (i) => pc() && (i === 1 || i === 4);
+function sonraki(i, yon) { do { i += yon; } while (atlanir(i)); return i; }
+
+function izinVar(i) {
+  if (i === 0) return !!d.senaryo;
+  if (i === 1) return d.baglandi;
+  if (i === 2) return pc() ? d.ekran !== null : !!d.kaynak;
+  if (i === 3) return !!d.bolge;
+  if (i === 5) return ceviri && ceviri.hazir();
+  if (i === 6) return d.dublaj !== null;
+  return true;
+}
+const engelYazisi = { 0: "Size uyan kutuya tıklayın", 1: "OBS'e bağlanmayı bekliyorum…", 2: "Oyun görüntüsünü seçin", 3: "Altyazının yerini bulun", 5: "Anahtarı kaydedip deneyin ya da üstten \"Hazır çeviri\"yi seçin", 6: "Bir seçenek seçin" };
+function guncelle() {
+  document.body.classList.toggle("pc", pc());
+  adimlar.forEach((a, i) => a.classList.toggle("aktif", i === simdi));
+  let no = 0;
+  [...liste.children].forEach((li, i) => {
+    li.className = (i < simdi ? "tamam" : i === simdi ? "simdi" : "") + (atlanir(i) ? " atla" : "");
+    if (atlanir(i)) return;
+    if (i > 0 && i < SON) { no++; li.querySelector(".no").textContent = no; const u = adimlar[i].querySelector(".ust-yazi"); if (u) u.textContent = "Adım " + no; }
+  });
+  engelYazisi[2] = pc() ? "Oyunun olduğu ekrana tıklayın" : "Oyun görüntüsünü seçin";
+  $("geri").style.visibility = simdi === 0 || simdi === SON ? "hidden" : "visible";
+  const ileri = $("ileri");
+  ileri.style.display = simdi === SON ? "none" : "";
+  ileri.textContent = simdi === 0 ? "Başlayalım →" : (simdi === 4 && d.monitor === null) ? "Atla →" : "Devam →";
+  ileri.disabled = !izinVar(simdi);
+  ileri.classList.toggle("parla", !ileri.disabled && simdi > 0 && simdi < SON);
+  $("engel").textContent = ileri.disabled ? (engelYazisi[simdi] || "") : "";
+}
+function adimaGit(i) {
+  simdi = i; guncelle(); girildi(i); document.querySelector("main").scrollTop = 0;
+}
+$("ileri").onclick = async () => {
+  if (!izinVar(simdi)) return;
+  if (simdi === 3 && d.bolge) { try { await api("/api/bolge_kaydet", { bolge: d.bolge }); } catch (e) {} }
+  adimaGit(sonraki(simdi, 1));
+};
+$("geri").onclick = () => adimaGit(Math.max(0, sonraki(simdi, -1)));
+function girildi(i) {
+  clearInterval(obsZamanlayici);
+  if (i !== 3) oynarkenBulDurdur();
+  if (i === 1) { obsKontrol(); obsZamanlayici = setInterval(obsKontrol, 2000); }
+  if (i === 2) pc() ? ekranlariGetir() : kaynaklariGetir();
+  if (i === 3 && !$("tuval-resim").getAttribute("src")) goruntuYenile();
+  if (i === 4) oyunEkrani();
+  if (i === 6) dublajDurum();
+  if (i === SON) ozetCiz();
+}
+
+// ---------- 0: senaryo ----------
+document.querySelectorAll("[data-senaryo]").forEach((k) => k.onclick = async () => {
+  if (k.classList.contains("kapali")) return;
+  const onceki = d.senaryo;
+  d.senaryo = k.dataset.senaryo;
+  document.querySelectorAll("[data-senaryo]").forEach((x) => x.classList.toggle("secili", x === k));
+  try { await api("/api/senaryo", { senaryo: d.senaryo }); } catch (e) {}
+  if ((onceki === "pc") !== pc()) { $("tuval-resim").removeAttribute("src"); if (!kurulumTamam) d.bolge = null; }
+  guncelle();
+});
+
+// ---------- 2 (bilgisayar oyunu): ekran ----------
+async function ekranSec(no) {
+  await api("/api/ekran/sec", { no });
+  d.ekran = no;
+  [...$("ekranlar").children].forEach((c) => c.classList.toggle("secili", +c.dataset.no === no));
+  $("tuval-resim").removeAttribute("src");
+  guncelle();
+}
+async function ekranlariGetir() {
+  const kutu = $("ekranlar"); kutu.innerHTML = "";
+  mesaj("ekran-durum", "bilgi", "Ekranlara bakıyorum…");
+  try {
+    const j = await api("/api/ekran/listesi");
+    mesajGizle("ekran-durum");
+    if (d.ekran === null && j.secili) await ekranSec(j.secili);
+    j.ekranlar.forEach((e) => {
+      const el = document.createElement("div");
+      el.className = "kaynak" + (e.no === d.ekran ? " secili" : ""); el.dataset.no = e.no;
+      el.innerHTML = `<img alt=""><div><span></span></div>` + (e.ana ? '<span class="rozet gri">Ana ekran</span>' : "");
+      if (e.resim) el.querySelector("img").src = e.resim;
+      el.querySelector("div span").textContent = `${e.no}. ekran · ${e.genislik}×${e.yukseklik}`;
+      el.onclick = () => ekranSec(e.no).catch((x) => mesaj("ekran-durum", "hata", x.message));
+      kutu.appendChild(el);
+    });
+    if (j.ekranlar.length === 1) mesaj("ekran-durum", "ok", "Tek ekranınız var, onu seçtim. Oyunu açtıysanız devam edin.");
+  } catch (e) { mesaj("ekran-durum", "hata", e.message); }
+  guncelle();
+}
+$("ekran-yenile").onclick = ekranlariGetir;
+
+// ---------- 1: OBS (kendiliğinden) ----------
+function kontrolCiz(id, durum, alt, dugme) {
+  const e = $(id); e.className = "kontrol " + durum;
+  e.querySelector(".simge").innerHTML = durum === "ok" ? sim("onay") : durum === "bekle" ? "" : "•";
+  e.querySelector("span").textContent = alt || "";
+}
+let obsKontrolEdiliyor = false;
+async function obsKontrol() {
+  if (obsKontrolEdiliyor || d.baglandi && simdi !== 1) return;
+  obsKontrolEdiliyor = true;
+  try {
+    const j = await api("/api/obs/otomatik");
+    const kurulu = j.kurulu, acik = j.acik === true || j.baglandi;
+    const ws = j.websocket && j.websocket.etkin;
+    kontrolCiz("k-kurulu", kurulu ? "ok" : "bekle", kurulu ? "" : "OBS bu bilgisayarda yok. Aşağıdan indirip kurun.");
+    $("obs-indir-kart").style.display = kurulu ? "none" : "block";
+    kontrolCiz("k-acik", acik ? "ok" : (kurulu ? "bekle" : ""), acik ? "" : kurulu ? "OBS'i açın (masaüstündeki OBS Studio simgesi)." : "");
+    const wsDurum = j.baglandi || ws ? "ok" : (acik ? "bekle" : "");
+    kontrolCiz("k-ws", wsDurum, wsDurum === "ok" ? "" : acik ? "Aşağıdaki 4 adımı OBS'te yapın." : "");
+    $("ws-yardim").style.display = acik && !ws && !j.baglandi ? "grid" : "none";
+    kontrolCiz("k-bag", j.baglandi ? "ok" : (ws ? "bekle" : ""), j.baglandi ? "Harika, OBS'e bağlandım!" : (ws && j.hata ? j.hata : ""));
+    if (j.baglandi && !d.baglandi) { d.baglandi = true; clearInterval(obsZamanlayici); }
+  } catch (e) { kontrolCiz("k-bag", "", e.message); }
+  obsKontrolEdiliyor = false;
+  guncelle();
+}
+$("baglan").onclick = async () => {
+  const b = $("baglan"); bekle(b, true, "Bağlanıyor");
+  try {
+    await api("/api/obs/baglan", { sifre: $("sifre").value, port: $("port").value });
+    d.baglandi = true; mesaj("baglan-durum", "ok", "OBS'e bağlandı.");
+    clearInterval(obsZamanlayici); obsKontrol();
+  } catch (e) { mesaj("baglan-durum", "hata", e.message); }
+  bekle(b, false); guncelle();
+};
+
+// ---------- 2: kaynak ----------
+async function kaynakSec(ad) {
+  await api("/api/obs/kaynak_sec", { ad });
+  d.kaynak = ad;
+  [...$("kaynaklar").children].forEach((c) => c.classList.toggle("secili", c.dataset.ad === ad));
+  $("tuval-resim").removeAttribute("src"); d.bolge = kurulumTamam ? d.bolge : null;
+  guncelle();
+}
+async function kaynaklariGetir() {
+  const kutu = $("kaynaklar"); kutu.innerHTML = "";
+  mesaj("kaynak-durum", "bilgi", "OBS'teki görüntüler alınıyor…");
+  try {
+    const j = await api("/api/obs/kaynaklar");
+    mesajGizle("kaynak-durum");
+    if (j.secili && !d.kaynak) d.kaynak = j.secili;
+    if (!d.kaynak && j.onerilen) await kaynakSec(j.onerilen);
+    $("cc-ekle-kart").style.display = !j.kaynaklar.length || (!j.onerilen && d.senaryo === "konsol_obssuz") ? "block" : "none";
+    if (!j.kaynaklar.length) mesaj("kaynak-durum", "bilgi", "OBS'te henüz görüntü yok. Aşağıdaki adımlarla capture card'ı ekleyin.");
+    j.kaynaklar.forEach((k) => {
+      const el = document.createElement("div");
+      el.className = "kaynak" + (k.ad === d.kaynak ? " secili" : ""); el.dataset.ad = k.ad;
+      el.innerHTML = `<img alt=""><div><span></span></div>` + (k.ad === j.onerilen ? '<span class="rozet lava">Oyun bu gibi</span>' : "");
+      el.querySelector("img").src = k.resim; el.querySelector("div span").textContent = k.ad;
+      el.onclick = () => kaynakSec(k.ad).catch((e) => mesaj("kaynak-durum", "hata", e.message));
+      kutu.appendChild(el);
+    });
+  } catch (e) { mesaj("kaynak-durum", "hata", e.message); }
+  guncelle();
+}
+$("kaynak-yenile").onclick = kaynaklariGetir;
+
+// ---------- 3: altyazı yeri ----------
+const tuval = $("tuval"), secim = $("secim");
+function secimCiz() {
+  if (!d.bolge) { secim.style.display = "none"; return; }
+  const b = d.bolge;
+  Object.assign(secim.style, { display: "block", left: b.x * 100 + "%", top: b.y * 100 + "%", width: b.w * 100 + "%", height: b.h * 100 + "%" });
+}
+async function goruntuYenile() {
+  const b = $("goruntu-yenile"); bekle(b, true, "Alınıyor");
+  try {
+    const j = await api("/api/goruntu");
+    $("tuval-resim").src = j.resim; $("tuval-bos").style.display = "none";
+    secimCiz(); mesajGizle("okuma-durum");
+  } catch (e) { mesaj("okuma-durum", "hata", e.message); $("tuval-bos").textContent = "Görüntü alınamadı"; }
+  bekle(b, false); guncelle();
+}
+$("goruntu-yenile").onclick = goruntuYenile;
+async function bulVeGoster() {
+  const j = await api("/api/bolge_bul");
+  d.bolge = j.bolge;
+  $("tuval-resim").src = j.resim; $("tuval-bos").style.display = "none";
+  secimCiz();
+  await okumaDene(true);
+}
+$("otomatik-bul").onclick = async () => {
+  oynarkenBulDurdur();
+  const b = $("otomatik-bul"); bekle(b, true, "Arıyorum");
+  try { await bulVeGoster(); } catch (e) { mesaj("okuma-durum", "bilgi", e.message); }
+  bekle(b, false); guncelle();
+};
+
+// Bilgisayar oyunu, tek ekran: kullanıcı oyuna geçer, altyazı çıkana kadar birkaç saniyede bir ekrana bakarım
+let oynarkenBul = null;
+function oynarkenBulDurdur() {
+  if (!oynarkenBul) return;
+  oynarkenBul.iptal = true; oynarkenBul = null;
+  $("sonra-bul").innerHTML = sim("kol") + " Oynarken bul";
+}
+$("sonra-bul").onclick = async () => {
+  if (oynarkenBul) { oynarkenBulDurdur(); mesaj("okuma-durum", "bilgi", "Aramayı durdurdum."); return; }
+  const is = oynarkenBul = { iptal: false };
+  const b = $("sonra-bul"), bitis = Date.now() + 120000;
+  b.textContent = "⏹ Aramayı durdur";
+  mesaj("okuma-durum", "bilgi", "Şimdi oyuna geçin (Alt+Tab). Altyazı çıkınca yakalayacağım…");
+  await new Promise((r) => setTimeout(r, 3000));
+  while (!is.iptal && Date.now() < bitis) {
+    try {
+      await bulVeGoster();
+      if (is.iptal) return;
+      oynarkenBulDurdur();
+      mesaj("okuma-durum", "ok", "Altyazıyı oyun oynarken yakaladım! Okuduğum yazı aşağıda. Doğruysa devam edin.");
+      guncelle();
+      return;
+    } catch (e) {
+      if (is.iptal) return;
+      mesaj("okuma-durum", "bilgi", `Altyazı bekliyorum… (${Math.ceil((bitis - Date.now()) / 1000)} sn) Oyunda biri konuşsun.`);
+    }
+    await new Promise((r) => setTimeout(r, 1500));
+  }
+  if (!is.iptal) { oynarkenBulDurdur(); mesaj("okuma-durum", "bilgi", "2 dakikada altyazı göremedim. Oyunda altyazıların açık olduğundan emin olup tekrar deneyin ya da \"Olmuyor mu?\" kısmından elle ayarlayın."); }
+};
+document.querySelectorAll("[data-bolge]").forEach((b) => b.onclick = () => {
+  const [x, y, w, h] = b.dataset.bolge.split(",").map(Number); d.bolge = { x, y, w, h }; secimCiz(); guncelle();
+});
+let cizim = null;
+function konum(e) {
+  const r = tuval.getBoundingClientRect();
+  return { x: Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)) };
+}
+tuval.addEventListener("pointerdown", (e) => { if (!$("tuval-resim").getAttribute("src")) return; cizim = konum(e); tuval.setPointerCapture(e.pointerId); });
+tuval.addEventListener("pointermove", (e) => {
+  if (!cizim) return;
+  const p = konum(e);
+  d.bolge = { x: Math.min(cizim.x, p.x), y: Math.min(cizim.y, p.y), w: Math.abs(p.x - cizim.x), h: Math.abs(p.y - cizim.y) };
+  secimCiz();
+});
+tuval.addEventListener("pointerup", () => {
+  if (cizim && d.bolge && (d.bolge.w < 0.03 || d.bolge.h < 0.02)) mesaj("okuma-durum", "bilgi", "Kutu çok küçük, biraz daha büyük çizin.");
+  cizim = null; guncelle();
+});
+async function okumaDene(otomatik) {
+  if (!d.bolge) return mesaj("okuma-durum", "bilgi", "Önce altyazının yerini bulun.");
+  const j = await api("/api/okuma_testi", { bolge: d.bolge });
+  $("okuma-sonuc").style.display = "block";
+  $("okunan").textContent = j.metin || "(hiçbir şey okunamadı)";
+  $("kesit-resim").src = j.kesit; $("maske-resim").src = j.maske;
+  if (j.anlamli) { d.okundu = j.metin; mesaj("okuma-durum", "ok", (otomatik ? "Altyazıyı buldum! " : "") + "Okuduğum yazı doğruysa devam edin."); }
+  else mesaj("okuma-durum", "bilgi", "Yeri buldum ama yazıyı net okuyamadım. Altyazı ekrandayken tekrar deneyin ya da \"Olmuyor mu?\" kısmından elle ayarlayın.");
+  $("okuma-sonuc").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+$("okuma-dene").onclick = async () => {
+  const b = $("okuma-dene"); bekle(b, true, "Okunuyor");
+  try { if (!$("tuval-resim").getAttribute("src")) await goruntuYenile(); await okumaDene(false); }
+  catch (e) { mesaj("okuma-durum", "hata", e.message); }
+  bekle(b, false);
+};
+
+// ---------- 4: oyun ekranı ----------
+async function oyunEkrani() {
+  if (!d.katman) {
+    try {
+      const j = await api("/api/obs/altyazi_ekle", {});
+      d.katman = true;
+      mesaj("katman-durum", "ok", `Türkçe yazı katmanını OBS'teki "${j.sahne}" sahnesine ekledim.`);
+    } catch (e) { mesaj("katman-durum", "hata", "Türkçe yazı OBS'e eklenemedi: " + e.message); }
+  }
+  const masa = $("masa"); masa.innerHTML = "";
+  try {
+    const j = await api("/api/obs/monitorler");
+    if (j.secili !== null && j.secili !== undefined && d.monitor === null) d.monitor = j.secili;
+    const m = j.monitorler;
+    if (!m.length) { masa.innerHTML = '<div class="bos-akis" style="padding:80px 0; text-align:center; color:var(--soluk)">Monitör bulunamadı</div>'; return; }
+    const minX = Math.min(...m.map((x) => x.x)), minY = Math.min(...m.map((x) => x.y));
+    const maxX = Math.max(...m.map((x) => x.x + x.genislik)), maxY = Math.max(...m.map((x) => x.y + x.yukseklik));
+    const W = masa.clientWidth - 60, H = 160, olcek = Math.min(W / (maxX - minX), H / (maxY - minY));
+    const ox = (masa.clientWidth - (maxX - minX) * olcek) / 2, oy = 22;
+    m.forEach((mon) => {
+      const el = document.createElement("div");
+      el.className = "monitor" + (mon.index === d.monitor ? " secili" : "");
+      Object.assign(el.style, { left: ox + (mon.x - minX) * olcek + 4 + "px", top: oy + (mon.y - minY) * olcek + "px",
+        width: mon.genislik * olcek - 8 + "px", height: mon.yukseklik * olcek - 8 + "px" });
+      el.innerHTML = `<b>${mon.index + 1}</b><span></span><span>${mon.genislik}×${mon.yukseklik}</span>`;
+      el.querySelector("span").textContent = mon.ad;
+      el.onclick = async () => {
+        try {
+          await api("/api/obs/projektor_ac", { index: mon.index });
+          d.monitor = mon.index;
+          masa.querySelectorAll(".monitor").forEach((x) => x.classList.toggle("secili", x === el));
+          mesaj("monitor-durum", "ok", `Oyunu ${mon.index + 1} numaralı ekranda tam ekran açtım. Türkçe yazı orada görünecek. Kapatmak için o ekranda Esc.`);
+        } catch (e) { mesaj("monitor-durum", "hata", e.message); }
+        guncelle();
+      };
+      masa.appendChild(el);
+    });
+  } catch (e) { mesaj("monitor-durum", "hata", e.message); }
+  guncelle();
+}
+
+// ---------- 6: Türkçe ses ----------
+document.querySelectorAll("[data-dublaj]").forEach((k) => k.onclick = async () => {
+  d.dublaj = k.dataset.dublaj !== "0";
+  d.altyaziGoster = k.dataset.dublaj !== "2";
+  document.querySelectorAll("[data-dublaj]").forEach((x) => x.classList.toggle("secili", x === k));
+  $("dublaj-ayar").style.display = d.dublaj ? "block" : "none";
+  try { await api("/api/dublaj/kaydet", { acik: d.dublaj }); await api("/api/gorunum_kaydet", { altyazi_goster: d.altyaziGoster }); } catch (e) {}
+  guncelle();
+});
+async function dublajDurum() {
+  try {
+    const j = await api("/api/dublaj/durum");
+    if (!j.destek) {
+      document.querySelectorAll('[data-dublaj="1"], [data-dublaj="2"]').forEach((k) => { k.classList.add("kapali"); k.querySelector("p").textContent = "Bu bilgisayarda kullanılamıyor."; });
+      return;
+    }
+    d.sesVar = j.turkce_var;
+    // Doğal sesler (programla gelir) varsa Windows'un Türkçe sesi yalnızca yedektir; o yoksa da okunabilir
+    let dg = null;
+    try { dg = await api("/api/dogal/durum"); } catch (e) {}
+    d.dogal = dg && dg.kurulu && (dg.sesler || []).length && j.ayar.dogal_ses !== false ? dg : null;
+    $("dogal-not").style.display = d.dogal ? "block" : "none";
+    if (d.dogal) $("dogal-sayi").textContent = d.dogal.sesler.length;
+    $("dogal-yedek").style.display = d.dogal && j.turkce_var ? "" : "none";
+    $("ses-etiket").textContent = d.dogal ? "Yedek ses (Windows)" : "Ses";
+    $("ses-sec-kutu").style.display = j.turkce_var ? "" : "none";
+    $("hiz-etiket").style.display = $("hiz").style.display = j.turkce_var ? "" : "none";  // hız Windows sesinin ayarı
+    $("ses-yok").style.display = j.turkce_var || d.dogal ? "none" : "block";
+    $("ses-var").style.display = j.turkce_var || d.dogal ? "block" : "none";
+    const sel = $("ses-sec");
+    sel.innerHTML = j.sesler.filter((s) => s.dil.toLowerCase().startsWith("tr")).map((s) => `<option value="${s.id}"></option>`).join("");
+    j.sesler.filter((s) => s.dil.toLowerCase().startsWith("tr")).forEach((s, i) => sel.options[i].textContent = s.ad.replace("Microsoft ", ""));
+    if (j.ayar.ses) sel.value = j.ayar.ses;
+    $("hiz").value = j.ayar.hiz || 1.15; $("hiz-deger").textContent = "×" + (+$("hiz").value).toFixed(2);
+    $("kis").checked = j.ayar.okurken_kis !== false;
+    $("karakter-kutu").style.display = j.karakter_destek ? "" : "none";
+    $("karakter").checked = j.ayar.karakter_sesleri !== false;
+    if (d.dublaj === null) document.querySelector(`[data-dublaj="${j.ayar.acik ? (d.altyaziGoster === false ? 2 : 1) : 0}"]`).click();
+  } catch (e) {}
+}
+$("ses-ayarlari").onclick = () => disariAc("ms-settings:speech");
+$("ses-kontrol").onclick = dublajDurum;
+$("hiz").oninput = () => { $("hiz-deger").textContent = "×" + (+$("hiz").value).toFixed(2); };
+$("hiz").onchange = $("ses-sec").onchange = $("kis").onchange = $("karakter").onchange = () =>
+  api("/api/dublaj/kaydet", { ses: $("ses-sec").value, hiz: +$("hiz").value, okurken_kis: $("kis").checked,
+                              karakter_sesleri: $("karakter").checked }).catch(() => {});
+$("dinle").onclick = async () => {
+  const b = $("dinle"), metin = "Merhaba! Oyundaki konuşmaları böyle Türkçe okuyacağım.";
+  // Doğal sesler varsa onlardan biriyle okunur (oyunda duyulacak olan). Ses motoru kapalıysa önce açılır (~10 sn).
+  if (d.dogal) {
+    const acik = d.dogal.durum === "hazir";
+    bekle(b, true, acik ? "Okuyorum" : "Hazırlanıyor");
+    if (acik) mesajGizle("dublaj-durum"); else mesaj("dublaj-durum", "bilgi", "Doğal sesler açılıyor; ilk dinleme birkaç saniye sürer.");
+    const ses = d.dogal.sesler.find((s) => s.cinsiyet === "erkek") || d.dogal.sesler[0];
+    try {
+      await api("/api/dogal/dinle", { id: ses.id, metin });
+      d.dogal.durum = "hazir";
+      mesajGizle("dublaj-durum"); setTimeout(() => bekle(b, false), 2500);
+      return;
+    } catch (e) {
+      bekle(b, false);
+      if (!d.sesVar) { mesaj("dublaj-durum", "hata", e.message); return; }
+      mesaj("dublaj-durum", "bilgi", e.message + " Şimdilik Windows sesiyle okuyorum.");
+    }
+  } else mesajGizle("dublaj-durum");
+  bekle(b, true, "Okuyorum");
+  try { await api("/api/dublaj/dinle", { ses: $("ses-sec").value, hiz: +$("hiz").value, metin }); }
+  catch (e) { mesaj("dublaj-durum", "hata", e.message); }
+  setTimeout(() => bekle(b, false), 1500);
+};
+
+// ---------- 7: hazır ----------
+function ozetCiz() {
+  const satirlar = pc() ? [
+    ["Oyun", `${d.ekran}. ekran (Türkçe yazı oyunun üstünde)`],
+  ] : [
+    ["Oyun görüntüsü", d.kaynak || "—"],
+    ["Oyun ekranı", d.monitor !== null ? `${d.monitor + 1}. ekran (OBS tam ekran)` : "Kendi ayarınız"],
+  ];
+  satirlar.push(
+    ["Çeviri", d.motorAdlari[ceviri ? ceviri.secili() : ""] || "—"],
+    ["Türkçe yazı", d.altyaziGoster === false ? "Kapalı" : "Açık"],
+    ["Türkçe ses", d.dublaj ? "Açık" : "Kapalı"],
+  );
+  $("ozet").innerHTML = satirlar.map(() => "<div><span></span><b></b></div>").join("");
+  [...$("ozet").children].forEach((el, i) => { el.children[0].textContent = satirlar[i][0]; el.children[1].textContent = satirlar[i][1]; });
+}
+$("bitir").onclick = async () => {
+  const b = $("bitir"); bekle(b, true, "Başlıyor");
+  try { await api("/api/bitir"); await api("/api/motor/baslat"); git("/panel"); }
+  catch (e) { mesaj("bitir-durum", "hata", e.message); bekle(b, false); }
+};
+
+// ---------- açılış ----------
+(async () => {
+  try {
+    const j = await api("/api/durum");
+    kurulumTamam = j.kurulum_tamam;
+    d.motorAdlari = j.motor_adlari;
+    if (j.obs) { $("port").value = j.obs.port || 4455; $("sifre").value = j.obs.sifre || ""; }
+    if (j.obs && j.obs.kaynak_adi) d.kaynak = j.obs.kaynak_adi;
+    if (kurulumTamam) {
+      d.bolge = j.bolge; d.senaryo = j.senaryo; d.altyaziGoster = j.goruntu.altyazi_goster !== false; d.monitor = j.obs.projektor_monitor ?? null;
+      if (j.kaynak_tip === "ekran") d.ekran = j.ekran_no;
+    }
+    if (d.senaryo) document.querySelector(`[data-senaryo="${d.senaryo}"]`)?.classList.add("secili");
+    ceviri = ceviriBileseni($("ceviri-kutu"), j.ceviri, { ornekMetin: () => d.okundu, kayitta: guncelle });
+    if (kurulumTamam) {
+      $("alt-not").innerHTML = '<a id="panele-don">← Kontrol paneline dön</a>';
+      $("panele-don").onclick = () => git("/panel");
+    }
+    const istenen = parseInt(new URLSearchParams(location.search).get("adim") || "0", 10);
+    if (istenen && kurulumTamam) {
+      try { const o = await api("/api/obs/otomatik"); d.baglandi = o.baglandi; } catch (e) {}
+      adimaGit(istenen); return;
+    }
+  } catch (e) { document.querySelector("main .ic").insertAdjacentHTML("afterbegin", `<div class="mesaj hata" style="display:block">${e.message}</div>`); }
+  guncelle();
+})();
+</script>
+</body>
+</html>

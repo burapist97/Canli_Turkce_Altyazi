@@ -1,0 +1,11 @@
+{
+ "gorunen_ad": "Kaan",
+ "cinsiyet": "erkek",
+ "tanitim": "Kırklarında, sert ve tehditkâr adam; derin, pürüzlü ses.",
+ "referans": "referans.wav",
+ "referans_metni": "Bak, sana son kez söylüyorum. Bu iş göründüğü kadar kolay değil. Arabaya bin, yolda her şeyi anlatacağım. Polisler peşimizde, acele etmemiz lazım. Hazır mısın? O zaman gidelim.",
+ "tohum": 1605151426,
+ "tarif": "A tough, intimidating Turkish man in his forties with a deep, gravelly, rough voice, slow and menacing, native Turkish speaker with clear Istanbul Turkish diction, natural conversational acting like a video game character, clean close-mic studio recording, no background noise, no music",
+ "kaynak": "Canlı Türkçe Altyazı için VoxCPM2 ile tariften tasarlandı (paket/dogal_ses/ses_tasarla.py); yapay ses, bir kişinin kaydından klonlanmadı",
+ "sira": 2
+}

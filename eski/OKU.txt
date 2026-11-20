@@ -1,0 +1,2 @@
+2.6 ve oncesinin arayuzu (kurulum sihirbazi + kontrol paneli; konsol/OBS kurulumu dahil) ve onun testleri.
+2.7'de yerini arayuz.html / arayuz.css / arayuz.js aldi (yalniz bilgisayar oyunlari). Pakete girmez; basvuru icin durur.

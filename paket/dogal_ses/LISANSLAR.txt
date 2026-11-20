@@ -1,0 +1,16 @@
+Canlı Türkçe Altyazı — Doğal Ses Paketi: kullanılan bileşenler ve lisansları
+
+audio.cpp v0.9.5 (ses sunucusu)
+  Copyright 2026 ShugoAI LLC — Apache License 2.0
+  https://github.com/0xShug0/audio.cpp  (motor\LICENSE)
+
+VoxCPM2 (konuşma üretme modeli, q8_0 GGUF)
+  OpenBMB — Apache License 2.0
+  https://huggingface.co/openbmb/VoxCPM2 , GGUF: https://huggingface.co/audio-cpp/audio.cpp-gguf
+
+Karakter sesleri (sesler\)
+  Appic tarafından VoxCPM2'nin "ses tasarımı" özelliğiyle, yalnızca yazılı bir tariften üretildi.
+  Hiçbir gerçek kişinin kaydından klonlanmadı. Üretilen konuşmalar yapay zekâ sesidir.
+  Yöntem: github.com/alexturkey/voxcpm2-turkce-ses-tasarimi (Apache-2.0) yaklaşımı.
+
+Kullanım koşulu (VoxCPM2): kişi taklidi, dolandırıcılık ve yanıltıcı içerik üretmek yasaktır.

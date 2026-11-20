@@ -1,0 +1,9 @@
+{
+ "gorunen_ad": "Defne",
+ "cinsiyet": "kadin",
+ "tanitim": "Yirmili yaşlarında, kendine güvenen, sokak zekâsı olan genç kadın; sıcak ve net ses.",
+ "referans": "referans.wav",
+ "tohum": 1799,
+ "sira": 5,
+ "kaynak": "Canlı Türkçe Altyazı için metin tarifinden tasarlanmış yapay sesin (paket/dogal_ses/ses_tasarla.py) Pocket TTS ile kopyası; gerçek bir kişinin sesi değil"
+}

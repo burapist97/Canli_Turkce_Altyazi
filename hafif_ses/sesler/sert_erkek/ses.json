@@ -1,0 +1,9 @@
+{
+ "gorunen_ad": "Kaan",
+ "cinsiyet": "erkek",
+ "tanitim": "Kırklarında, sert ve tehditkâr adam; derin, pürüzlü ses.",
+ "referans": "referans.wav",
+ "tohum": 51426,
+ "sira": 7,
+ "kaynak": "Canlı Türkçe Altyazı için metin tarifinden tasarlanmış yapay sesin (paket/dogal_ses/ses_tasarla.py) Pocket TTS ile kopyası; gerçek bir kişinin sesi değil"
+}

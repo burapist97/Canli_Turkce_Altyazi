@@ -31,6 +31,9 @@ magaza/gorseller/arayuz/
 # Ses tasarımı denemelerinin ara dosyaları (sonuçlar paket/dogal_ses/sesler ve hafif_ses/sesler içinde)
 paket/dogal_ses/adaylar/
 
+# Yerel araç ayarları
+.claude/
+
 # Geliştiricinin kendi çalışma notları (kaynak kodun parçası değil)
 CLAUDE.md
 YAYIN_KONTROL_LISTESI.md

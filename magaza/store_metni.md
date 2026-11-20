@@ -2,7 +2,7 @@
 
 Partner Center → Canlı Türkçe Altyazı → Store listings → Turkish (Türkiye). Görseller: `magaza/gorseller/` (`magaza/gorsel_uret.py` üretir).
 Kural: marka adı (oyun, film, dizi, yayın servisi adları) ve gerçek oyun/film görüntüsü KULLANILMAZ.
-Yapılacak: kaynak kod deposu açılınca Description'daki "AÇIK KAYNAK" bölümüne "Kaynak kodu: https://..." satırı eklenecek (AGPL gereği).
+Kaynak kod deposu: https://github.com/burapist97/Canli_Turkce_Altyazi (her sürüm `v<sürüm>` etiketiyle; AGPL gereği Store sayfasında link durur).
 
 ## Description
 
@@ -39,7 +39,8 @@ GİZLİLİK
 Hesap yok, reklam yok, kullanım takibi yok. Ekran görüntüsü yalnızca bilgisayarınızda işlenir; kaydedilmez, hiçbir yere gönderilmez.
 
 AÇIK KAYNAK
-Uygulama özgür yazılımdır (AGPL-3.0).
+Uygulama özgür yazılımdır: GNU AGPL-3.0 lisansıyla, hiçbir garanti verilmeden dağıtılır.
+Kaynak kodu: https://github.com/burapist97/Canli_Turkce_Altyazi
 
 GEREKSİNİMLER
 • Windows 10 (1809 veya üzeri) ya da Windows 11, 64 bit; Windows 10 sürüm 2004 veya üzeri önerilir
@@ -95,6 +96,11 @@ Yalnız `magaza/gorseller/` içindeki 01–08 yüklenir (`arayuz/` ve `eski/` kl
 8. `08_gizlilik.png` — Hesap yok, reklam yok, takip yok. Açık kaynak.
 
 Store logoları: `hero_16x9.png` (16:9 Super hero art, yazısız), `poster_9x16.png` (9:16 Poster art), `kutu_1x1.png` (1:1 Box art).
+
+## Additional license terms (Store listing → "Additional license terms")
+
+Bu uygulama GNU Affero Genel Kamu Lisansı sürüm 3 (AGPL-3.0) ya da daha sonraki bir sürümüyle lisanslanmıştır ve hiçbir garanti verilmeden sağlanır. Uygulamayı bu lisansın koşullarında kullanabilir, inceleyebilir, değiştirebilir ve dağıtabilirsiniz. Lisans metni: https://www.gnu.org/licenses/agpl-3.0.html · Kaynak kodu: https://github.com/burapist97/Canli_Turkce_Altyazi
+This app is licensed under the GNU Affero General Public License v3.0 or later and is provided without any warranty. License: https://www.gnu.org/licenses/agpl-3.0.html · Source code: https://github.com/burapist97/Canli_Turkce_Altyazi
 
 ## Copyright and trademark info
 
